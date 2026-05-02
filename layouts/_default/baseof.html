@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="{{ site.Language.LanguageCode | default site.Language.Lang }}">
   <head>
     {{ $cssVersion := md5 (readFile "static/css/site.css") }}
     {{ $isPost := and .IsPage (eq .Section "posts") }}
@@ -23,13 +23,16 @@
     {{ if gt .Lastmod.Unix 0 }}
       {{ $modifiedISO = .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}
     {{ end }}
+    {{ $isEn := eq site.Language.Lang "en" }}
+    {{ $ogLocale := cond $isEn "en_US" "zh_CN" }}
+    {{ $schemaLang := cond $isEn "en" "zh-CN" }}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $pageTitle }}</title>
     <link rel="canonical" href="{{ $canonical }}">
     <meta name="description" content="{{ $description }}">
     <meta name="robots" content="index,follow,max-image-preview:large">
-    <meta property="og:locale" content="zh_CN">
+    <meta property="og:locale" content="{{ $ogLocale }}">
     <meta property="og:site_name" content="{{ site.Title }}">
     <meta property="og:type" content="{{ if $isPost }}article{{ else }}website{{ end }}">
     <meta property="og:title" content="{{ $pageTitle }}">
@@ -38,6 +41,9 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{{ $pageTitle }}">
     <meta name="twitter:description" content="{{ $description }}">
+    {{ range .AllTranslations }}
+      <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+    {{ end }}
     {{ if $isPost }}
       <meta property="article:published_time" content="{{ $publishedISO }}">
       <meta property="article:modified_time" content="{{ $modifiedISO }}">
@@ -56,7 +62,7 @@
       "name" site.Title
       "url" site.BaseURL
       "description" $siteDescription
-      "inLanguage" "zh-CN"
+      "inLanguage" $schemaLang
     }}
     {{ if $isPost }}
       {{ $schema = dict
@@ -70,7 +76,7 @@
         "dateModified" $modifiedISO
         "author" (dict "@type" "Person" "name" $authorName)
         "publisher" (dict "@type" "Person" "name" $authorName)
-        "inLanguage" "zh-CN"
+        "inLanguage" $schemaLang
       }}
     {{ end }}
     <script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
@@ -124,10 +130,59 @@
         }
       })();
     </script>
+    <script>
+      // Browser-language-based auto-redirect for first-time visitors.
+      // Honors a 'lang-pref' cookie once set (by either auto-redirect or user click).
+      (function(){
+        try {
+          var path = window.location.pathname || '/';
+          var search = window.location.search || '';
+          var hash = window.location.hash || '';
+          var isEnPath = path === '/en' || path.indexOf('/en/') === 0;
+          var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+          var prefersZh = nav.indexOf('zh') === 0;
+          var prefersEn = nav.indexOf('en') === 0;
+
+          // Respect explicit user preference.
+          var cookie = document.cookie || '';
+          if (cookie.indexOf('lang-pref=') !== -1) return;
+
+          // Already on the right side for the browser preference: no-op.
+          if (isEnPath && prefersEn) return;
+          if (!isEnPath && prefersZh) return;
+
+          // Only auto-redirect zh -> en. Don't auto-redirect en -> zh: zh is the default
+          // language, and a non-zh browser landing on /en is likely the right place.
+          if (!isEnPath && !prefersZh) {
+            var target = '/en' + (path === '/' ? '/' : path) + search + hash;
+            // Set cookie before navigating so the /en/ load doesn't loop.
+            document.cookie = 'lang-pref=auto-redirected; Path=/; Max-Age=31536000; SameSite=Lax';
+            window.location.replace(target);
+          }
+        } catch (e) { /* fail-open: render the current page */ }
+      })();
+    </script>
   </head>
   <body>
     {{ $permalink := .Permalink }}
     {{ $section := .Section }}
+    {{ $currentLang := site.Language.Lang }}
+    {{/* Find the matching translation in the other language, if any. */}}
+    {{ $otherLang := cond (eq $currentLang "en") "zh-cn" "en" }}
+    {{ $otherLangCode := cond (eq $currentLang "en") "zh" "en" }}
+    {{ $switchHref := "" }}
+    {{ range .Translations }}
+      {{ if eq .Language.Lang $otherLang }}
+        {{ $switchHref = .RelPermalink }}
+      {{ end }}
+    {{ end }}
+    {{ if not $switchHref }}
+      {{ if eq $otherLang "en" }}
+        {{ $switchHref = "/en/" }}
+      {{ else }}
+        {{ $switchHref = "/" }}
+      {{ end }}
+    {{ end }}
     <div class="shell">
       <main class="content fade-in">
         {{ block "main" . }}{{ end }}
@@ -135,23 +190,29 @@
       </main>
 
       <aside class="sidebar">
-        <a class="brand" href="{{ "" | absURL }}">
+        <a class="brand" href="{{ "" | relLangURL }}">
           <svg class="logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Diff">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1817 22.6075C13.1817 24.6974 11.4815 26.3976 9.39167 26.3976C7.30185 26.3976 5.60165 24.6974 5.60165 22.6075C5.60165 20.5177 7.30185 18.8175 9.39167 18.8175H13.1817V22.6075ZM32 5.60263V0H13.1817V13.2147H9.39173C8.12497 13.2147 6.8946 13.4634 5.73482 13.954C4.61605 14.4272 3.61182 15.1041 2.75014 15.9658C1.88842 16.8275 1.21156 17.8316 0.738368 18.9505C0.247808 20.1102 -0.000915527 21.3406 -0.000915527 22.6074C-0.000915527 23.8741 0.247808 25.1045 0.738368 26.2643C1.21156 27.3831 1.88842 28.3873 2.75014 29.2489C3.61182 30.1107 4.61605 30.7875 5.73482 31.2607C6.8946 31.7513 8.12497 32 9.39173 32C10.6585 32 11.8889 31.7513 13.0486 31.2607C14.1674 30.7875 15.1716 30.1107 16.0333 29.2489C16.895 28.3873 17.5719 27.3831 18.0451 26.2643C18.5356 25.1045 18.7844 23.8741 18.7844 22.6074V18.7853H32V13.1827H18.7844V5.60263H32Z" fill="#FF7F83"/>
           </svg>
         </a>
 
         <nav class="side-nav">
-          <a class="{{ if .IsHome }}is-active{{ end }}" href="{{ "" | absURL }}">首页</a>
-          <a class="{{ if or (eq $section "posts") (eq $permalink ("blog/" | absURL)) }}is-active{{ end }}" href="{{ "blog/" | absURL }}">博客</a>
-          <a class="{{ if eq $permalink ("projects/" | absURL) }}is-active{{ end }}" href="{{ "projects/" | absURL }}">项目</a>
-          <a class="{{ if eq $permalink ("now/" | absURL) }}is-active{{ end }}" href="{{ "now/" | absURL }}">近况</a>
-          <a class="{{ if eq $permalink ("about/" | absURL) }}is-active{{ end }}" href="{{ "about/" | absURL }}">关于</a>
-          <a class="{{ if eq $permalink ("links/" | absURL) }}is-active{{ end }}" href="{{ "links/" | absURL }}">链接</a>
+          {{ $home := "" | relLangURL }}
+          {{ $blog := "blog/" | relLangURL }}
+          {{ $projects := "projects/" | relLangURL }}
+          {{ $now := "now/" | relLangURL }}
+          {{ $about := "about/" | relLangURL }}
+          {{ $links := "links/" | relLangURL }}
+          <a class="{{ if .IsHome }}is-active{{ end }}" href="{{ $home }}">{{ i18n "nav_home" }}</a>
+          <a class="{{ if eq $section "posts" }}is-active{{ end }}" href="{{ $blog }}">{{ i18n "nav_blog" }}</a>
+          <a class="{{ if eq .RelPermalink $projects }}is-active{{ end }}" href="{{ $projects }}">{{ i18n "nav_projects" }}</a>
+          <a class="{{ if eq .RelPermalink $now }}is-active{{ end }}" href="{{ $now }}">{{ i18n "nav_now" }}</a>
+          <a class="{{ if eq .RelPermalink $about }}is-active{{ end }}" href="{{ $about }}">{{ i18n "nav_about" }}</a>
+          <a class="{{ if eq .RelPermalink $links }}is-active{{ end }}" href="{{ $links }}">{{ i18n "nav_links" }}</a>
         </nav>
 
         <div class="side-util">
-          <button class="icon-btn" onclick="toggleDark()" aria-label="Toggle theme" id="theme-toggle">
+          <button class="icon-btn" onclick="toggleDark()" aria-label="{{ i18n "theme_toggle" }}" id="theme-toggle">
             <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
@@ -160,6 +221,7 @@
               <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
             </svg>
           </button>
+          <a class="lang-switch" href="{{ $switchHref }}" data-lang="{{ $otherLangCode }}" onclick="setLangPref('{{ $otherLangCode }}')" hreflang="{{ $otherLangCode }}" aria-label="{{ i18n "switch_language" }}">{{ i18n "switch_language" }}</a>
         </div>
       </aside>
     </div>
@@ -177,6 +239,11 @@
         document.getElementById('icon-sun').style.display = isDark ? 'block' : 'none';
       }
       updateThemeIcon();
+      function setLangPref(lang) {
+        try {
+          document.cookie = 'lang-pref=' + lang + '; Path=/; Max-Age=31536000; SameSite=Lax';
+        } catch (e) {}
+      }
     </script>
   </body>
 </html>

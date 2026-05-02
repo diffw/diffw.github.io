@@ -1,145 +1,83 @@
-# diff-blog-zh
+# diff-blog
 
-这个目录是 Hugo blog 项目的根目录。
+Hugo 站点仓库，对应 GitHub 仓库 `diffw/diffw.github.io`，部署到 GitHub Pages，自定义域 `diff.im`。
 
-## 目录角色
+## 角色分工
 
-- Obsidian 写作源目录:
-  `/Users/diffwang/Library/Mobile Documents/iCloud~md~obsidian/Documents/notes/diff-blog`
-- Hugo 项目目录:
-  `/Users/diffwang/NWA/diff-blog-zh`
+写作和发布跨两个仓库：
 
-约定:
+| 角色 | 位置 |
+|---|---|
+| 写作源（Obsidian + git） | 本地 `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/diff-blog-source` ↔ `github.com/diffw/diff-blog-source` |
+| Hugo 站点（本仓库） | 本地 `~/NWA/diff-blog` ↔ `github.com/diffw/diffw.github.io` |
+| 发布站 | GitHub Pages → `diff.im` |
 
-- `diff-blog` 是唯一内容源。
-- 日常创建、编辑、修改文章都在 Obsidian 的 `diff-blog` 目录里完成。
-- Hugo 目录中的 `content/posts` 是同步结果，不手工编辑，避免双向漂移。
-- `template.md` 只用于 Obsidian 写作模板，不进入 Hugo 发布目录。
+约定：
 
-## 发布规则
+- `diff-blog-source` 是唯一内容源。
+- 本仓库的 `content/posts/` 和 `content/{about,links,now,projects}.md` 由同步流程写入，**不手工编辑**，避免双向漂移。
+- 本仓库需要手工维护的是站点本身：`layouts/`、`static/`、`hugo.yaml`、workflow、`tests/` 等。
 
-- 只处理 `diff-blog` 目录中的 `.md` 文件。
-- 忽略 `template.md`。
-- 只有 front matter 中 `draft: false` 的文章才允许发布。
-- `draft: true` 的文章不发布。
-- 缺少有效 front matter、缺少 `title`、缺少 `date` 或缺少 `draft` 的文章不会发布。
-- 已发布文章后续修改时，仍然通过同一套自动发布流程同步到 Hugo blog。
+## 内容创作
 
-## Debounce 自动发布
+在 Obsidian 的 `diff-blog-source` 目录里写 Markdown：
 
-当前采用“自动 debounce 后发布”的设计。
+- 仓库根目录的 `*.md` → 文章（同步到本仓库的 `content/posts/`）。
+- `pages/*.md` → 站点页面（同步到本仓库的 `content/`，目前是 about / links / now / projects）。
+- `.blog-syncignore` 列出不发布的文件（一行一个文件名，目前只有 `template.md`）。
 
-规则如下:
+写完后用 Obsidian 的 git 插件 commit & push 到 `diffw/diff-blog-source`。
 
-1. 监听 `diff-blog` 目录中的文章变化。
-2. 当文章发生新增、修改、删除或 front matter 变化时，不立即发布。
-3. 每次变化都会重置计时器。
-4. 如果最后一次变化之后连续一段时间没有新的变更，再自动执行一次发布。
+## 发布流程
 
-### Debounce 时间
+两段 GitHub Actions 接力，全程在 GitHub 上跑，本机不需要常驻进程。
 
-测试阶段:
+### 第一段：source 仓库的同步 workflow
 
-- debounce 时间设置为 `3 分钟`
+`diff-blog-source/.github/workflows/sync-posts-to-blog.yml`，在 push 到 `main` 且改动了 `*.md` / `pages/*.md` / `.blog-syncignore` / 同步脚本时触发：
 
-也就是:
+1. checkout `diff-blog-source`。
+2. 用 `BLOG_REPO_TOKEN` checkout `diffw/diffw.github.io` 到 `blog-repo/`。
+3. 跑 `scripts/sync-posts-to-blog.sh` 两次：
+   - 根目录 `*.md` → `blog-repo/content/posts/`（参考 `.blog-syncignore`）。
+   - `pages/*.md` → `blog-repo/content/`。
+   - **镜像式同步**：源里删掉的文件会从目标里一并删除。
+4. 如果 `blog-repo/content/` 有 diff，以 `github-actions[bot]` 身份提交 `Sync content from diff-blog-source@<sha>` 并 push 到本仓库 main。
 
-- 文章有改动后，如果连续 `3 分钟` 没有新的变化，就自动触发一次同步和 push。
+### 第二段：本仓库的 Hugo 构建 workflow
 
-正式阶段计划:
+`.github/workflows/hugo.yml`，监听本仓库 main 的 push（包括上一步 bot 的 push）和手动 dispatch：
 
-- 将 debounce 时间调整为 `10 分钟`
+1. 安装 Hugo 0.160.1 extended。
+2. `hugo --minify` 构建到 `./public`。
+3. 跑 `tests/test_rendered_site.py` 做产物健全性检查。
+4. `upload-pages-artifact` + `deploy-pages` → GitHub Pages。
 
-## 自动发布动作
+自定义域由 `CNAME`（`diff.im`）和 `hugo.yaml` 的 `baseURL: https://diff.im/` 决定。
 
-当 debounce 到期后，自动发布流程会执行这些动作:
-
-1. 校验文章 front matter。
-2. 筛选出 `draft: false` 的文章。
-3. 将可发布文章同步到 Hugo 项目内容目录 `content/posts/`。
-4. 将不再发布的文章从 Hugo 发布目录中移除。
-5. 只对 `content/posts/` 执行 `git add`、`git commit`、`git push`。
-6. 由 GitHub Actions 构建并发布 Hugo 站点。
-
-注意:
-
-- 自动发布脚本只提交 `content/posts/`，不会顺带提交这个仓库中的其他开发文件改动。
-- 如果仓库里还有其他未提交的代码修改，它们会保留在工作区，不会被自动发布流程一起带上去。
-
-## 安装依赖
+## 本地预览
 
 ```bash
-cd /Users/diffwang/NWA/diff-blog-zh
-python3 -m pip install --user -r requirements.txt
+cd ~/NWA/diff-blog
+hugo server -D
 ```
-
-## 手动执行一次同步发布
-
-在启用 watcher 之前，可以先手动跑一次，把 Obsidian 中可发布的文章同步进 Hugo:
-
-```bash
-cd /Users/diffwang/NWA/diff-blog-zh
-python3 scripts/publish_from_obsidian.py
-```
-
-只预览将要发生的变化，不真正写入或提交:
-
-```bash
-cd /Users/diffwang/NWA/diff-blog-zh
-python3 scripts/publish_from_obsidian.py --dry-run --no-push
-```
-
-## 启动本地 watcher
-
-手动启动 3 分钟 debounce 的自动发布 watcher:
-
-```bash
-cd /Users/diffwang/NWA/diff-blog-zh
-bash ./scripts/start_autopublish.sh --debounce-seconds 180
-```
-
-如果测试完成后要改成 10 分钟:
-
-```bash
-cd /Users/diffwang/NWA/diff-blog-zh
-bash ./scripts/start_autopublish.sh --debounce-seconds 600
-```
-
-## launchd 自启动
-
-已提供 launchd 配置模板:
-
-`ops/launchd/com.diffwang.diff-blog-zh.autopublish.plist`
-
-安装方式:
-
-```bash
-mkdir -p ~/Library/LaunchAgents
-cp ops/launchd/com.diffwang.diff-blog-zh.autopublish.plist ~/Library/LaunchAgents/
-launchctl unload ~/Library/LaunchAgents/com.diffwang.diff-blog-zh.autopublish.plist 2>/dev/null || true
-launchctl load ~/Library/LaunchAgents/com.diffwang.diff-blog-zh.autopublish.plist
-```
-
-停止方式:
-
-```bash
-launchctl unload ~/Library/LaunchAgents/com.diffwang.diff-blog-zh.autopublish.plist
-```
-
-## 主要脚本
-
-- `scripts/publish_from_obsidian.py`
-  单次执行同步、提交和推送
-- `scripts/watch_diff_blog.py`
-  监听 `diff-blog` 目录，并在 debounce 到期后自动发布
-- `scripts/start_autopublish.sh`
-  便于手工或 launchd 启动 watcher 的包装脚本
 
 ## 测试
 
-运行单元测试:
-
 ```bash
-cd /Users/diffwang/NWA/diff-blog-zh
+cd ~/NWA/diff-blog
 python3 -m unittest discover -s tests
 ```
+
+## 旁支：SEO / WordPress 迁移产物
+
+下面这些是从老 WordPress 站点迁移过来的副产物，不参与日常发文流程，按需手动跑：
+
+- `scripts/generate_seo_migration_artifacts.py`、`scripts/generate_nginx_*.py`、`scripts/import_wordpress_xml.py`、`scripts/prepare_public_aliases.py`
+- `data/wordpress_*_map.json`、`data/wordpress-url-map.csv`
+- `ops/nginx/*.conf`
+- `docs/seo-migration-audit.md`
+
+## 历史遗留
+
+`scripts/publish_from_obsidian.py`、`scripts/watch_diff_blog.py`、`scripts/start_autopublish.sh`、`ops/launchd/` 是上一版「本地 launchd watcher + debounce 自动发布」方案的产物，目前已被两段 GitHub Actions 取代，不再使用。

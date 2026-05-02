@@ -1,0 +1,31 @@
+nav_home: 首页
+nav_blog: 博客
+nav_projects: 项目
+nav_now: 近况
+nav_about: 关于
+nav_links: 链接
+
+back: 返回
+prev_post: 上一篇
+next_post: 下一篇
+
+home_recent_posts: 最近文章
+home_all_posts: 全部文章
+home_about_me: 关于我
+
+# Parameterized: count, year_end
+posts_count:
+  other: "{{ .count }} 篇文章 · 2007 – {{ .year }}"
+
+# Parameterized: count
+tag_count:
+  other: "{{ .count }} 篇文章"
+
+# Theme toggle aria-label
+theme_toggle: 切换主题
+
+# Language switcher
+switch_language: English
+
+# Date formats (Hugo Go time layout)
+date_format_long: "2006年1月2日"

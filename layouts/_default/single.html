@@ -1,13 +1,14 @@
 {{ define "main" }}
   {{ $isPost := eq .Section "posts" }}
+  {{ $dateFormat := i18n "date_format_long" }}
 
   {{ if $isPost }}
-    <a class="back" href="{{ "blog/" | absURL }}">&larr; 返回</a>
+    <a class="back" href="{{ "blog/" | relLangURL }}">&larr; {{ i18n "back" }}</a>
 
     <article class="article">
       <header class="article-header">
         <div class="meta">
-          <span>{{ .Date.Format "2006年1月2日" }}</span>
+          <span>{{ .Date.Format $dateFormat }}</span>
           {{ with .Params.tags }}
             <span>&middot;</span>
             <span>{{ delimit . ", " }}</span>
@@ -32,7 +33,7 @@
         <div>
           {{ with .PrevInSection }}
             <a href="{{ .RelPermalink }}">
-              <div class="lbl">&larr; 上一篇</div>
+              <div class="lbl">&larr; {{ i18n "prev_post" }}</div>
               <div class="ttl">{{ .Title }}</div>
             </a>
           {{ end }}
@@ -40,7 +41,7 @@
         <div class="right">
           {{ with .NextInSection }}
             <a href="{{ .RelPermalink }}">
-              <div class="lbl">下一篇 &rarr;</div>
+              <div class="lbl">{{ i18n "next_post" }} &rarr;</div>
               <div class="ttl">{{ .Title }}</div>
             </a>
           {{ end }}

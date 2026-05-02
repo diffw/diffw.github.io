@@ -2,7 +2,7 @@
   <section class="block">
     <h1 class="h1" style="margin-bottom: 8px;">{{ .Title }}</h1>
     <div class="mute" style="font-size: 13px;">
-      {{ len .Pages }} 篇文章
+      {{ i18n "tag_count" (dict "count" (len .Pages)) }}
     </div>
   </section>
   <section style="padding-bottom: 48px;">

@@ -2,7 +2,7 @@
   {{ $pages := .Pages.ByDate.Reverse }}
   {{ partial "page_head.html" (dict
     "title" .Title
-    "sub" (printf "%d 篇文章 · 2007 – %d" (len $pages) now.Year)
+    "sub" (i18n "posts_count" (dict "count" (len $pages) "year" now.Year))
   ) }}
 
   <section class="page-section">

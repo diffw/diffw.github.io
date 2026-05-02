@@ -1,0 +1,33 @@
+nav_home: Home
+nav_blog: Blog
+nav_projects: Projects
+nav_now: Now
+nav_about: About
+nav_links: Links
+
+back: Back
+prev_post: Previous
+next_post: Next
+
+home_recent_posts: Recent Posts
+home_all_posts: All Posts
+home_about_me: About Me
+
+# Parameterized: count, year_end
+posts_count:
+  one: "{{ .count }} post · 2007 – {{ .year }}"
+  other: "{{ .count }} posts · 2007 – {{ .year }}"
+
+# Parameterized: count
+tag_count:
+  one: "{{ .count }} post"
+  other: "{{ .count }} posts"
+
+# Theme toggle aria-label
+theme_toggle: Toggle theme
+
+# Language switcher
+switch_language: 中文
+
+# Date formats (Hugo Go time layout)
+date_format_long: "January 2, 2006"
