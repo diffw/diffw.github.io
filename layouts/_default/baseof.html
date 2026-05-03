@@ -167,22 +167,18 @@
     {{ $permalink := .Permalink }}
     {{ $section := .Section }}
     {{ $currentLang := site.Language.Lang }}
-    {{/* Find the matching translation in the other language, if any. */}}
-    {{ $otherLang := cond (eq $currentLang "en") "zh-cn" "en" }}
-    {{ $otherLangCode := cond (eq $currentLang "en") "zh" "en" }}
-    {{ $switchHref := "" }}
+    {{/* Compute hrefs for both languages so the switcher menu can show
+         the matching translation when one exists, falling back to the
+         language home when not. */}}
+    {{ $zhHref := "" }}
+    {{ $enHref := "" }}
+    {{ if eq $currentLang "zh-cn" }}{{ $zhHref = .RelPermalink }}{{ else }}{{ $enHref = .RelPermalink }}{{ end }}
     {{ range .Translations }}
-      {{ if eq .Language.Lang $otherLang }}
-        {{ $switchHref = .RelPermalink }}
-      {{ end }}
+      {{ if eq .Language.Lang "zh-cn" }}{{ $zhHref = .RelPermalink }}{{ end }}
+      {{ if eq .Language.Lang "en" }}{{ $enHref = .RelPermalink }}{{ end }}
     {{ end }}
-    {{ if not $switchHref }}
-      {{ if eq $otherLang "en" }}
-        {{ $switchHref = "/en/" }}
-      {{ else }}
-        {{ $switchHref = "/" }}
-      {{ end }}
-    {{ end }}
+    {{ if not $zhHref }}{{ $zhHref = "/" }}{{ end }}
+    {{ if not $enHref }}{{ $enHref = "/en/" }}{{ end }}
     <div class="shell">
       <main class="content fade-in">
         {{ block "main" . }}{{ end }}
@@ -221,7 +217,19 @@
               <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
             </svg>
           </button>
-          <a class="lang-switch" href="{{ $switchHref }}" data-lang="{{ $otherLangCode }}" onclick="setLangPref('{{ $otherLangCode }}')" hreflang="{{ $otherLangCode }}" aria-label="{{ i18n "switch_language" }}">{{ i18n "switch_language" }}</a>
+          <div class="lang-switcher" id="lang-switcher">
+            <button class="icon-btn" type="button" onclick="toggleLangMenu(event)" aria-label="{{ i18n "switch_language" }}" aria-haspopup="true" aria-expanded="false" id="lang-toggle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M3 12h18"/>
+                <path d="M12 3a14.5 14.5 0 0 1 4 9 14.5 14.5 0 0 1-4 9 14.5 14.5 0 0 1-4-9 14.5 14.5 0 0 1 4-9z"/>
+              </svg>
+            </button>
+            <div class="lang-menu" id="lang-menu" role="menu" hidden>
+              <a href="{{ $zhHref }}" class="lang-item{{ if eq $currentLang "zh-cn" }} is-current{{ end }}" hreflang="zh" onclick="setLangPref('zh')" role="menuitem">中文{{ if eq $currentLang "zh-cn" }}<span class="check" aria-hidden="true">✓</span>{{ end }}</a>
+              <a href="{{ $enHref }}" class="lang-item{{ if eq $currentLang "en" }} is-current{{ end }}" hreflang="en" onclick="setLangPref('en')" role="menuitem">English{{ if eq $currentLang "en" }}<span class="check" aria-hidden="true">✓</span>{{ end }}</a>
+            </div>
+          </div>
         </div>
       </aside>
     </div>
@@ -244,6 +252,39 @@
           document.cookie = 'lang-pref=' + lang + '; Path=/; Max-Age=31536000; SameSite=Lax';
         } catch (e) {}
       }
+      function toggleLangMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('lang-menu');
+        var btn = document.getElementById('lang-toggle');
+        if (!menu || !btn) return;
+        var isOpen = !menu.hasAttribute('hidden');
+        if (isOpen) {
+          menu.setAttribute('hidden', '');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          menu.removeAttribute('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      }
+      document.addEventListener('click', function(e) {
+        var menu = document.getElementById('lang-menu');
+        if (!menu || menu.hasAttribute('hidden')) return;
+        var sw = document.getElementById('lang-switcher');
+        if (sw && !sw.contains(e.target)) {
+          menu.setAttribute('hidden', '');
+          var btn = document.getElementById('lang-toggle');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key !== 'Escape') return;
+        var menu = document.getElementById('lang-menu');
+        if (menu && !menu.hasAttribute('hidden')) {
+          menu.setAttribute('hidden', '');
+          var btn = document.getElementById('lang-toggle');
+          if (btn) { btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
+        }
+      });
     </script>
   </body>
 </html>
