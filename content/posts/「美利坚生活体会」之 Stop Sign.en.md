@@ -1,30 +1,30 @@
 ---
-title: 'Reflections on American Life: The Stop Sign'
+title: Stop Signs in America
 date: 2024-07-17 00:17:39+00:00
 draft: false
 tags:
-- american-drift
-translationKey: reflections-on-american-life-the-stop-sign
-slug: reflections-on-american-life-the-stop-sign
+- american-life
+translationKey: stop-signs-in-america
+slug: stop-signs-in-america
 source_hash: 57180b8199a07106744ea7de8f23198dc261c35ecce778a17232eec1100f50a2
 ---
 
-Someone asked me, what impressed me the most about life in America? My first answer would be: the Stop Sign.
+Someone asked me, what's the most striking thing about life in America? I'd say: Stop Sign.
 
-What is a Stop Sign? It's essentially a traffic sign indicating that vehicles must stop upon reaching it. The rules are simple:
+What's a Stop Sign? It's just a traffic sign where cars need to stop. The rules are simple:
 
-- When you encounter a Stop Sign, you must stop (if it's a driving test, the engine needs to be still for 2-3 seconds);
-- If it's a one-way Stop Sign, it means only you have the stop sign, and you must wait until all other vehicles have passed before you can proceed;
-- If it's an All-way Stop Sign, it means all intersections have Stop Signs, and you follow a first-come, first-served rule;
+- Encounter a Stop Sign, you must stop (if you're taking a driving test, the engine must be fully stopped for 2-3 seconds);
+- If it's a one-way Stop Sign, it means only you have the Stop Sign, and you must wait until all other directions are clear before moving;
+- If it's an All-way Stop Sign, meaning all corners have a Stop Sign, follow the first-come, first-go rule;
 
-Let's praise it: the Stop Sign is truly a great invention!
+Let's give some praise: The Stop Sign is truly a great invention!
 
-This simple traffic rule can keep traffic running smoothly without any police directing, even during rush hours. In contrast, I always think of the scenes in Shanghai where you see a police officer (or even multiple officers) at each intersection.
+Such a simple rule can keep traffic smooth without police direction, even during rush hours. It always makes me think of the intersections in Shanghai, where there's a traffic cop at every corner (sometimes more than one).
 
-After much thought and reflection, here are some commendable aspects of the great Stop Sign:
+After deep and rigorous reflection, I've concluded that the great Stop Sign has some praiseworthy aspects:
 
-- It maintains the smooth flow of traffic at low-volume intersections at a very low cost. There's no need for traffic lights or police direction. Of course, intersections with heavy traffic still need traffic lights (but no need for police); among them, an All-way Stop Sign can also distribute the traffic flow. Cars from four directions proceed one by one following the "first come, first go" rule. In comparison, traffic lights can cause traffic to concentrate too much;
-- Most importantly, this ordinary traffic sign quietly trains each person's sense of following the rules. Everyone gains higher efficiency by adhering to rules, rather than breaking them. Compared to high-profile core values, this awareness developed in the most subtle daily details is truly powerful!
-- Jokingly, the Stop Sign can help prevent senility. When you face an All-way Stop Sign, you need to calculate among the four directions, determining your place in line and after which vehicle you can move. Honestly, when you're not familiar, it does require a bit of brainwork.
+- With an extremely low cost, it keeps traffic flowing smoothly at non-busy intersections. No need for traffic lights or police direction. Of course, for very busy intersections, traffic lights are still needed (but no police); the All-way Stop Sign helps spread out the traffic. Cars from all four directions proceed one by one based on the "first come, first go" rule. In contrast, traffic lights can cause traffic clumping.
+- Most importantly, such an ordinary traffic sign quietly trains everyone to follow rules. People gain more efficiency by following rules rather than breaking them. Compared to lofty core values, this kind of awareness built into the minutiae of daily life is remarkable!
+- Jokingly, the Stop Sign could prevent Alzheimer's. When you're at an All-way Stop Sign, you have to calculate which car arrived first and when you can go. Honestly, when you're new to it, it takes a bit of brainwork.
 
-Of course, not every place in America is rule-abiding. What I despise the most is highway speed limits. In California, the highway speed limit is 65 mph (around 104 km/h), but in reality, most people drive at 75 mph (120 km/h), and even 80-85 mph (128-136 km/h). Additionally, in New York City, as a pedestrian, if you obey the traffic lights, people can immediately tell you're a visitor.
+Of course, not all places in America follow rules so strictly. What I find disgraceful is the freeway speed limits. In California, the speed limit is 65 mph (about 104 km/h), but most people actually drive at 75 mph (120 km/h), or even 80-85 mph (128-136 km/h). Also, in New York City, as a pedestrian, if you follow traffic lights, people can tell you're from out of town at a glance.

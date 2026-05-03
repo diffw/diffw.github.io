@@ -1,55 +1,59 @@
 ---
-title: Transformed by Gazing
+title: Transformed by Beholding
 date: 2021-01-23 01:11:23+00:00
 draft: false
 tags:
-- christianity
+- christian-faith
 - devotional-notes
-translationKey: transformed-by-gazing
-slug: transformed-by-gazing
+translationKey: transformed-by-beholding
+slug: transformed-by-beholding
 source_hash: 09f283234b56318a8f541400432cfe5d09a4bb0e9ac46ebb288decdb54b6c5b7
 ---
 
 Jan 23, 2021 at 6:32 AM
 
-We all, with unveiled faces, behold the glory of the Lord as in a mirror, and are transformed into His likeness with ever-increasing glory, as from the Lord, who is the Spirit. (2 Corinthians 3:18 NIV)
+'And we all, who with unveiled faces contemplate the Lord’s glory, are being transformed into his image with ever-increasing glory, which comes from the Lord, who is the Spirit.' (2 Corinthians 3:18, NIV)
 
-Every morning when I wake, I feel joyless.
+'We are not like Moses, who would put a veil over his face to prevent the Israelites from seeing the end of what was passing away. But whenever anyone turns to the Lord, the veil is taken away.' (Revised Chinese Union Version)
 
-Recently, the sudden pandemic surge in Shanghai has everyone on edge, and my mood has been swept up in this too. It feels like wartime, though invisible is the fire and smoke of battle. It also seems like the end times are near.
+'But we all, with open face beholding as in a glass the glory of the Lord, are changed into the same image from glory to glory, even as by the Spirit of the Lord.' (KJV)
 
-Upon examining my deepest concerns, I find I’m not as worried about how many people are falling ill or losing their lives, but more about the safety of my family and myself. My concerns extend to life's stability, a lack of supplies, and economic regression. There is barely any focus on life itself.
+Each morning, I wake up without joy.
 
-Lately, I've been anxious about my two children's education and faith. Constantly tense, I aim to manage every aspect of their education comprehensively and flawlessly. It feels like only this way can I find a brief moment of peace: "At last, the children are on the right path."
+Recently, Shanghai's sudden pandemic turn has everyone anxious. I've been caught up in it too. It's like being in wartime, just without the visible bombs and smoke. Feels like the end times are near.
 
-Their faith is equally concerning. As Christian parents, it's our duty to guide them to God. I understand that whether they believe in the future is God's work, but I still worry about their spiritual growth. This anxiety reflects a reliance on myself rather than on God.
+When I examine closely, my real worry isn't about how many people are sick or losing their lives. It's about my family's safety, and honestly, more about life not changing, resource scarcity, and economic setbacks. Hardly any focus on life itself.
 
-Brother Oswald Chambers said, "Secondary issues are constantly clamoring and easily crowd out dedication to God." Lord, guide me today to lay down these worries, to focus on you and gaze upon you.
+Lately, I'm also worried about the kids' education and faith. I'm constantly anxious, striving to arrange everything related to their education perfectly — not a drop of water should leak. Somehow, that seems to offer a moment of peace, "finally, the kids are on the right track."
 
-The Israelites, afraid of the divine glory reflected on Moses' face, asked him to cover it with a veil. Under the illumination of God's holiness and glory, people become aware of their own sin, filth, ugliness, and limitations.
+The same goes for their faith. As Christian parents, we should lead the kids to God. I know their belief is ultimately God's work. But their faith growth keeps me worried. This worry is a sign of relying on myself, not God.
 
-When compared among men, one might feel "ashamed," let alone when compared to God. No man can "reach" God, or "be with Jesus in paradise."
+Oswald Chambers said, "The distraction of secondary things is the one thing that keeps us from being entirely devoted to God." Lord, guide me today to let go of these concerns and focus on You, to behold You.
 
-Man cannot fulfill all the demands of God's law through asceticism or good deeds. Man cannot save himself from the death brought by sin.
+The Israelites were afraid of the glory reflected on Moses' face and asked him to cover it. Under God's holy, glorious light, we see our sin, filth, ugliness, and limits.
 
-Holy and sinless Jesus died for sinners like me (us). Thus, in God's judgment, He views sinners like me as sinless because Jesus bore the sin.
+When comparing with others, we feel ashamed. How much more when comparing ourselves with God? We can't "reach heaven" or "be with Jesus in paradise."
 
-Because of Jesus, after salvation, I no longer fear God's judgment due to my sinful thoughts and actions. There is no need for a veil anymore.
+No amount of self-discipline or good deeds can fulfill all the law's demands. We can't save ourselves from death caused by sin.
 
-What freedom this is!
+Holy, sinless Jesus died for me (us), sinners. Because of this, when God judges, He reckons us, sinners, as sinless. Because Jesus took our sin upon Himself.
 
-In the past, both the law and myself ruthlessly pushed "an imperfect person to achieve the impossible perfection through effort." Yet, not achieving this perfection is death.
+Thanks to Jesus, after being saved, I don’t need to fear God's judgment because of the sin remaining in my thoughts and deeds. No more veils needed.
 
-Now, simply by looking to Jesus, the veil is taken away, and I am set free. The freedom brought by the Spirit of the Lord;
+What freedom!
 
-But if I cease to look to Jesus and start relying even a little on myself, the veil returns, and I live under self-condemnation and despair "unable to satisfy the law's demands through good behavior." It is not freedom.
+Before the law, or myself, was a brutal force pressing "an imperfect person to achieve impossible perfection" through personal effort. Failing to reach perfection means death.
 
-Gazing at Jesus not only brings freedom but also transforms me into His holy likeness. Philippians 3:21 states, "He will transform our humble body to be like His glorious body by the power that enables Him to subject everything to Himself."
+Now, by looking to Jesus, the veil is removed, and I gain freedom. The freedom brought by the Spirit of the Lord;
 
-Pity my dullness and limitation, as I can't yet naturally cheer and treasure the prospect of "gradually becoming like the Lord" emotionally, despite intellectually understanding it. In knowing God, may the Lord let my emotions also align.
+But as soon as I stop looking at Jesus, and start relying on myself, the veil returns, and I'm back to "self-condemnation and despair at failing to meet the law's demands through good deeds." No freedom.
 
-Thanksgiving:
+Gazing at Jesus grants not just freedom. It also enables me to gradually conform to His holy image. Philippians 3:21: 'Who, by the power that enables him to bring everything under his control, will transform our lowly bodies so that they will be like his glorious body.'
 
-1. Jialiang has always provided help with various design software (Sketch/Figma). Whenever there are issues, I usually turn to him;
-2. Thank the Lord for giving me the ability to think and be inspired in design;
-3. Grateful for the joy my two children bring me. Each day, joy is just a part, and there are conflicts, contradictions, and heartaches. But this is the true picture of interpersonal relationships between sinful people. Thank God! Without God, everything — people, events, objects, joy, sorrow, pain — would scatter like the wind. What meaning would there be?
+My foolish limitations — right now, I can’t naturally stir emotional joy at the potential to "become more like the Lord," nor treasure it, only intellectually understand it. In my understanding of God, I ask Him to align my emotions too.
+
+Thank God:
+
+1. For my friend Jialong, always helping me with any issues in using design software like Sketch and Figma.
+2. For gifting me with the ability to think about design, and the inspiration that comes with it.
+3. For the joy my two kids bring me. Even though happiness is just part of everyday life, with conflicts, struggles, and heartbreak too. This is the real picture of relationships between sinners. Thank God! Without God, everything—people, matters, joy, sorrow, pain—would drift away like the wind. What's the point?

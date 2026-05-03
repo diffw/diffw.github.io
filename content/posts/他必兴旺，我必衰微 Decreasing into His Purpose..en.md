@@ -1,35 +1,37 @@
 ---
-title: He Must Increase, I Must Decrease
+title: Decrease into His Purpose
 date: 2021-03-24 12:23:03+00:00
 draft: false
 tags:
 - christian-faith
 - devotional-notes
-translationKey: he-must-increase-i-must-decrease
-slug: he-must-increase-i-must-decrease
+translationKey: decrease-into-his-purpose
+slug: decrease-into-his-purpose
 source_hash: a01efa171b135e37488d33956b51d527e5e80098f1a4ef6468e527b5392240e4
 ---
 
-He must increase, I must decrease. (John 3:30 ESV)
+He must become greater; I must become less. (John 3:30, NIV)
 
-The disciples told John that more and more people were going to Jesus to be baptized. They were concerned that Jesus was taking away their teacher's popularity. But John joyfully said, "He must increase, I must decrease," because John clearly understood his own role, namely, "I am not the Christ, but have been sent before him."
+John's disciples told him that more and more people were going to Jesus to be baptized. They worried that Jesus was taking their teacher's popularity. But John, with joy, said, "He must become greater; I must become less," because John knew his own place: "I am not the Messiah but am sent ahead of him."
 
-Brother Chambers said, "If you become indispensable to others, then you have strayed from God." This is a good reminder for me.
+Oswald Chambers said, "If you become indispensable to others, you have then gotten out of God's line." This is a good reminder to me.
 
-When friends around me face difficulties, out of sympathy and love, I am willing to pray for them, asking the Lord to help them out of trouble. I am also willing to offer some help, whether through effort, time, or money.
+When friends around me face difficulties, out of sympathy and love, I'm willing to pray for them, asking the Lord to help them out of their struggles. I'm also willing to offer some help, be it time or financial aid.
 
-Helping others is inherently good. But over time, I've also noticed some issues.
+Helping people is good. But slowly, I've also discovered some problems within it.
 
-After helping friends multiple times, they still haven't overcome their difficulties, nor do they seem to have any hope of doing so. My assistance merely delays the problem temporarily. Before long, the same issues will return. For me, this sometimes gives rise to the illusion and vanity of being "omnipotent and ever-responsive."
+After helping friends multiple times, they still couldn't get out of their difficulties, with seemingly no hope at all. My help only temporarily delays the problems. Before long, the same problems would return. Sometimes, I would get the illusion of "being able to solve anything" and a sense of vanity.
 
-Faced with these somewhat complex requests for help, I should think more deeply about the root of the difficulties rather than "simply and readily" offering help each time.
+Facing such slightly complex requests for help, I should think more deeply about the root of the difficulty, rather than offering "simple, quick" help each time.
 
-I should also pray, asking Jesus to lead my friends to seek Him in their difficulties, to repent, and to experience transformation. Instead of offering simplistic, shortcut prayers like "Lord, please quickly help my friends out of their troubles," perhaps God intends to use such difficulties to change a person. In fact, God often uses hardships to transform people.
+I should also pray, asking Jesus to lead my friends to seek Jesus, repent, and be renewed in their hardships, rather than just praying the easy, shortcut prayer, "Lord, help my friends quickly get out of their difficulties." Perhaps God uses such difficulties to change a person. In reality, God often changes people through hardships.
 
-We should bring people to Jesus, allowing them to know and experience Him, forgetting about ourselves; not bringing people to our own presence to receive gratitude, which boosts our pride.
+We should bring people to Jesus, let them know and experience Him, and forget about me; rather than bringing them to me, where they would end up being grateful to me and feeding my pride.
 
-Gratitude
+Thank God for:
 
-1. My daughter felt unwell and had a fever during class. The school nurse carefully checked her, and all her teachers were attentive in their care. Even a teacher she didn't know in a corner chatted with my daughter, offering comfort and blessings. I thank God for bringing us to this school and for the love of the teachers.
-2. WD encountered an unfair situation, but after initial anger, the team entrusted the matter to God and prayed for the offender. I thank God for His guidance.
-3. Can't think of any particular gratitude topics right now.
+1. My daughter felt unwell in class, ran a fever. The school nurse examined her thoroughly, and each teacher showed caring concern. Even a teacher we didn't know yet exchanged a word with her, offering comfort and blessings. Thank God for leading us to this school and thank the teachers for their love.
+
+2. WD encountered an unfair situation, but after some indignation, the team handed it over to God, and also prayed for the offender. Thank God for guiding us.
+
+3. Honestly, can't think of any other special thanks right now.

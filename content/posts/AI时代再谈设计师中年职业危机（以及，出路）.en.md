@@ -1,65 +1,69 @@
 ---
-title: Discussing Mid-Career Crisis for Designers in the Age of AI (And the Way Out)
+title: Revisiting Midlife Career Crisis for Designers in the AI Era (And the Way Forward)
 date: 2026-04-19 13:35:49+00:00
 draft: false
 tags:
 - designer
 - career
-translationKey: discussing-mid-career-crisis-for-designers-in-the-age-of-ai
-slug: discussing-mid-career-crisis-for-designers-in-the-age-of-ai
+translationKey: ai-era-midlife-career-crisis-designers
+slug: ai-era-midlife-career-crisis-designers
 source_hash: 4298ee218b5b78c4721f0ccd18df730a77d96e482fedb59ffa81327a92c4bb4e
 ---
 
+The idea of a career crisis is really just a surface issue. At its core, it's pressure or confusion over two things: survival and personal value and meaning. Maybe I was lucky—at 36, the startup I worked with went public on NASDAQ, easing the pressure on survival for me. (But the question of personal value and meaning never stopped haunting me.)
 
-The so-called career crisis is actually just a facade. At its core, it stems from pressure or confusion about two things: survival and personal value and meaning. Perhaps I'm somewhat fortunate, at 36, because the startup I was part of successfully listed on NASDAQ, providing me with rewards that alleviated the pressure on survival. (However, personal value and meaning have always been entangled with me, incessantly challenging me.)
+Between 2019 and 2021, people saw me as a "success story" for designers, and I gave talks to friends and companies.
 
-Between 2019 and 2021, I was often regarded as a "success story" among designers and was invited to share my experiences with friends or companies.
+The most common question was: How should designers deal with a midlife crisis?
 
-The most frequently asked question was: How should a designer face a mid-career crisis?
+My answer was both honest and dishonest:
 
-My response at the time was both honest and not so honest:
+1. The honest part: I admitted I had no solution (and for me, it's already resolved).
+2. The dishonest part: I shared some insincere advice to make things sound more positive, like "focus more on personal growth," "transition into management," "build networks," etc.
 
-1. **Honest part:** I admitted I had no solution (because, for me, it was no longer necessary to have one).
-2. **Not so honest part:** To keep the mood positive, I said some things I didn't really mean. Such as: Mid-career designers should focus more on personal growth, shift towards management, and build more networks.
+Frankly, those suggestions felt empty.
 
-In fact, those words (advice) were quite disingenuous.
+Since January 2020, I've been doing design work. Frankly, until December 2025, from an outsider's view, I still believed in the existence of a midlife and career crisis for designers.
 
-Since January 2020, I've continuously worked in design. Honestly, up until December 2025, as an observer, I still perceived that a mid-career crisis and job crisis for designers exist.
+In many ways, midlife designers can't match the younger ones:
 
-Because, in many ways, mid-career designers indeed lag behind younger ones:
-
-1. Slower reaction time
+1. Slower reactions
 2. Worse memory
-3. Slower team integration
-4. Slower to accept new things, sometimes even more closed-minded
+3. Slower to integrate into teams
+4. Slower and sometimes closed off to new things
 
-But, from the end of 2025 to the present in 2026, my thoughts on the designer's mid-career job crisis have changed completely.
+But from the end of 2025 to now in 2026, my view on a midlife career crisis for designers has completely shifted.
 
-I believe for designers, and even other creative professions (like engineers), career crises no longer exist. As one reaches middle age, physical stamina, speed, and energy may not compare to younger folks, but what's crucial is the accumulated experience, established knowledge/theoretical frameworks, as well as the judgment and aesthetic derived from that knowledge and theory (often called "taste" these days). These elements are the most valuable assets for designers in the AI era. Because in the age of AI, you no longer need to compete in physical endurance or speed, as AI itself handles everything.
+I think for designers and other creative fields (like engineers), career crises no longer exist. Sure, as one enters midlife, physical energy and speed can't match the young. But what's crucial is the accumulated experience, built knowledge/theory systems, and the judgment and taste born of them. These are what's most valuable for designers in the AI era. Because in the AI era, there's no need to compete on energy or speed—AI handles everything.
 
-An equally important factor is the accumulated project experience, cross-team collaboration experience, and understanding of other professional fields over time. Honestly, I haven't specifically studied any programming language, nor systematically learned about copywriting, planning, or market growth. But in the past 20+ years of my career, working with professionals from different fields, I've generally absorbed the overall knowledge frameworks and decision-making bases of various professions. This is invaluable for AI designers. Because in the AI era, your role isn't solely about designing. Especially for those positioning themselves as "individual developers," this accumulated knowledge across fields is a treasure trove.
+Another key point is accumulated project experience, cross-team collaboration, and understanding other fields. Honestly, I never formally studied programming, writing, planning, or growth marketing. But over the past 20-plus years, just working with pros across fields gave me a general grasp of their frameworks and reasoning. This is invaluable for designers using AI. In the AI era, your role isn't just to design. Especially for those positioning themselves as "independent developers," this accumulated field knowledge is a huge asset.
 
-Simply put, if a designer today doesn't embrace AI, doesn't use AI to design, or even directly uses AI for coding, then you will inevitably face a mid-career job crisis.
+Simply put, if a designer today doesn't embrace AI, doesn't design with AI, or use AI directly for coding, they're bound to face a midlife career crisis.
 
-It's not necessarily a mid-career crisis; even if you're young now, if you don't embrace AI, you'll face the same career crisis: unable to find work, unable to find opportunities.
+It's not even limited to midlife. Even if you're young, not embracing AI means facing a career crisis, with no job or opportunities.
 
-In terms of designing, creating, and expressing ideas, each day now excites me, and I'm eager to make, to express.
+In design, creativity, and expressing ideas, I'm now excited every day and eager to get hands-on.
 
-This state is very much like it was some twenty years ago; back then, around 2002 to 2005, I was deeply immersed in creating animations for personal websites. Unfortunately—or perhaps regrettably—those animations were merely for display and couldn't be practically used.
+It's just like 20 years ago, around 2002 to 2005, when I was obsessed with making animations for personal sites. Unfortunately, those animations were only for show and weren't truly usable.
 
-But now, things are different. As a designer, you have the ability to turn your ideas into products genuinely usable by users. So far, I've launched two products: an iOS App and a macOS App.
+But now is different. As a designer, you now have the ability to turn your ideas into products users can actually use. So far, I've launched two products—an iOS app and a macOS app.
 
-It's really so much fun!
+It's so much fun!
 
-The threshold to turn ideas into tangible products is getting lower and lower. As designers, we should take action and take that first step.
+The threshold for turning ideas into products is getting lower. As designers, we should take action and make that move.
 
-Here are some practical action suggestions:
-1. Find ways to use tools like Figma Make, Cursor, Codex, Claude (including Claude Code / Claude Design) for designing, especially Claude Design. There are two challenges here: one is access to the internet, and the other is cost. Most of these services start at 20 USD per month. But it's definitely a worthwhile investment.
-2. Pay attention to developers in this field. Of course, I prefer to call them Builders. Most of the people I follow aren't necessarily designers. In the AI era, developers with product insights (discovering/insight into user needs) and who possess a basic design sense and user experience awareness have a greater competitive edge.
-3. Get hands-on and create something. I believe a designer who is truly passionate about design is also a creator. He/she will undoubtedly have the passion and impulse to turn ideas into reality. Previously, it might have only been possible to stay at the design draft level, but now it's different. You can truly turn your ideas into actual products. Whether the product is big or small, even if it's reinventing the wheel (like creating a diary, photo app, calculator...), make one first!
-4. Don't fear failure, don't fear setbacks. With AI's aid, you can feed the process of failure and setbacks back to AI, letting AI help solve them. Of course, you need to learn more skills, comprehend more concepts. For instance, you should learn how to write Prompts more effectively and accurately. You need to explore Skills, including understanding more about engineering fields, such as the concept of Git, how to use GitHub, etc. These have some initial thresholds but are actually progressive, all starting from the smallest foundation and gradually building up.
-5. Use AI to learn. For me, I created a Skills. Whenever I need to understand a new concept, I throw it to AI, and it explains it to me using the full learning framework within Skills, in a very straightforward, non-technical language, providing enough simple examples for comprehension. This is one of my methods; you can also create your own AI learning approach.
+Here are some practical suggestions:
 
-For now, I've briefly introduced these suggestions and action items. Of course, these are the easiest steps to take. The harder part is product distribution and growth (as everyone says, the most valuable thing now isn't the design, the code, or launching the product, but the user's attention). This is also why I've returned to writing articles on public accounts, x.com, and sharing on Little Red Book.
+1. Try using Figma Make, Cursor, Codex, Claude (including Claude Code/Claude Design) to design, especially Claude Design. Challenges include web access and cost—these services usually start at $20 a month. But it's absolutely a worthwhile investment.
 
-To me, all of this is a lot of fun. I often tell my kids I love my design work because it's so enjoyable that sometimes I can't tell whether I'm playing or working.
+2. Follow developers in this field. I prefer to call them Builders. Most people I follow might not be designers. In the AI era, a developer with product ideas (discovering user needs) and basic design and user experience awareness is more competitive.
+
+3. Make something. I believe a designer truly passionate about design is also a creator. They have the drive and urge to turn ideas into reality. Before, we may only work up to design drafts, but now is different; you can turn your ideas into actual products. Whether the product is big or small, even if it's reinventing the wheel (like making a journal app, photo app, calculator...), make that wheel first.
+
+4. Don't fear failure or setbacks. With AI, you can let the process of failures and setbacks feedback into AI, letting AI help you solve them. Of course, you need to learn more skills and understand more concepts. For instance, learn to write prompts more effectively and precisely, and learn about skills and engineering concepts like Git and using GitHub. There’s an initial barrier but it's progressive and can build up from a small base.
+
+5. Use AI to learn. For me, I created a Skills framework. Whenever I need to learn a new concept, I give it to AI, and it explains within the framework using non-technical terms, with simple examples. It's how I learn; you can create your AI learning style too.
+
+These suggestions and action lists are basic first steps that are easiest to start. The harder part is distribution and growth of the product (everyone says now attention, not design, code, or launching products, is the most precious). That's why I returned to write on WeChat public accounts, x.com, and share on Xiaohongshu.
+
+To me, it's all so much fun. I often tell my kids I love design work because it's so enjoyable—I can't tell if I'm playing or working.

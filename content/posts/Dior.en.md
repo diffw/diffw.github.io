@@ -10,10 +10,13 @@ slug: dior
 source_hash: 80d01aceed02dbf8c270a9989f59f1ac0a95456fcd83efbd7d9f8726e8c1cc0c
 ---
 
-![](http://www.handhard.com/blog/wp-content/uploads/2010/12/62cc0776tw6dby9uj83xwj.png "62cc0776tw6dby9uj83xwj")
-Seeing a tweet like this was startling:
-> Christian Dior was a pivotal designer who brought traditional clothing into modern functionalism. Yet he once lived without a stable home, earning a living sketching in Parisian backstreets and waiting rooms, never having received formal training in fashion, his life full of ups and downs. However, he was keenly aware of being a natural-born designer with a remarkably acute sense of proportion. His illustrious career didn't truly begin until after he turned forty.
+![62cc0776tw6dby9uj83xwj](http://www.handhard.com/blog/wp-content/uploads/2010/12/62cc0776tw6dby9uj83xwj "62cc0776tw6dby9uj83xwj")
 
-And I have some questions to ask myself:
-1. Can you recognize where your talent and value lie?
-2. Can you hold onto that belief? Even amidst instability! Even if it means giving up a decent salary and environment. Even if it means facing the unknown! (requires courage)
+Saw a Weibo post that floored me:
+
+> Christian Dior was an important designer who brought traditional clothing into modern functionalism. He once lived a nomadic life, making a living by sketching in backstreets and waiting rooms in Paris, with no formal fashion training, drifting from place to place. However, he clearly recognized that he was a born designer, with an acute sense of proportion. His brilliant career only truly began after he turned 40.
+
+And I have a few questions to ask myself:
+
+1. Can you recognize your own talents and value?
+2. Can you hold on to that belief? Even through instability! Even if it means giving up good pay and comfortable surroundings. Even if it means facing the unknown! (That takes courage)

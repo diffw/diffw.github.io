@@ -3,30 +3,31 @@ title: Building for Eternity
 date: 2021-05-07 00:18:05+00:00
 draft: false
 tags:
-- christianity
+- christian-faith
 - devotional-notes
 translationKey: building-for-eternity
 slug: building-for-eternity
 source_hash: 772ef705441ed32c0244f12d118820bdc302761588473cc4032494176d6a87df
 ---
 
-Luke 14:28 (NIV)  
-Which of you, wishing to build a tower, does not first sit down and estimate the cost to see if you have enough to complete it?
+### Luke 14:28 (NIV)
 
-Last night, I was really stirred by the new studio of my classmate/friend Yi Xiuqin. It's spacious and exquisite, like a private art gallery and a luxury hotel. Then I thought about how he even has time for hobbies, while I’m busy with my children’s education, family, faith (though I haven’t really invested much time). Truly, I felt envy, jealousy, and frustration.
+"Suppose one of you wants to build a tower. Won't you first sit down and estimate the cost to see if you have enough money to complete it?"
 
-Thank God for His protection, allowing me to read the Bible and do my devotions when I was feeling weak.
+Last night, seeing my friend, Yixiu Qin's, new studio hit me — it's expansive and intricate, like a private art museum and luxury hotel. And he still finds time for hobbies. Meanwhile, I feel busy with the kids' education, family, faith (though honestly, not much time spent there). Truly, envy, jealousy, and hate. Mood not great.
 
-Being a disciple of Christ requires paying a price, which is to "give up everything you have" to follow Christ. Everything you have means anything apart from Christ.
+Thank God for His protection; even when my spirits are low, I made it to read the Bible and have my devotional time today.
 
-If one does not give up everything, like I do now, focusing on many things other than Christ, does that mean I cannot be a disciple of Christ? Of course, I cannot be a disciple of Christ. These are Jesus' original words. Does being unworthy to be a disciple of Christ equate to not being justified or saved? I’m not sure or perhaps unwilling to admit it.
+Being a disciple of Christ means paying a price — that's "giving up everything" to follow Him. Everything means all things outside of Christ.
 
-Because if I admit that those who do not "give up everything" cannot be disciples of Christ, and therefore cannot obtain eternal life, then how many are truly saved?
+If I don't give up everything, like how I'm now, focusing on many things outside of Christ, doesn't that mean I can't be His disciple? Of course, it means I can't be His disciple. That's exactly what Jesus said. If I'm not worthy to be His disciple, does that mean I can't be justified and saved? I'm unsure. Or maybe, I just don’t want to admit it.
 
-There are many Christians, but very few who "give up everything."
+Because, if I admit that "not giving up everything" means I can't be a disciple, and thus can't gain eternal life, then how many are truly saved?
 
-I need to count the cost of following Jesus, count the cost of being a disciple, count the cost of salvation. The Gospel is not cheap, and salvation is not cheap; the Lord Jesus has already paid a great cost for me. I absolutely cannot repay God anything. But I truly need to know that this heavenly path is not easy; it requires counting and bearing the cost.
+There are many Christians, but few have "given up everything."
 
-The life we have now is real—it can be seen with eyes and touched with hands—but it is incomplete, sinful, and temporary; whereas the life in eternity, though not yet visible to the eyes, is even more real and glorious.
+I need to calculate the cost of following Jesus, the cost of discipleship, the cost of salvation. The gospel isn't cheap; salvation isn't cheap. The Lord Jesus has already paid a heavy price for me. I can't repay God at all. Yet, I truly need to understand that this path to heaven isn't easy; it requires counting and paying the cost.
 
-During this morning’s prayer, as I repented for my current state, I thought of the scriptures, "Those who run after other gods will suffer more and more," and "For the kingdom of God is not a matter of eating and drinking, but of righteousness, peace and joy in the Holy Spirit." These verses made me feel deeply that God’s words are true, trustworthy, and awe-inspiring.
+This present life is real enough to be seen and touched but it's incomplete, sinful, and temporary. The life in eternity, though unseen, is more real and glorious.
+
+During morning prayer, while repenting the current state, I thought of "Those who run after other gods will suffer more and more," and "For the kingdom of God is not a matter of eating and drinking, but of righteousness, peace and joy in the Holy Spirit." These passages make me feel deeply that God's words are true, credible, and awe-inspiring.

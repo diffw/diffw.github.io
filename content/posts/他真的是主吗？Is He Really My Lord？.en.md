@@ -3,36 +3,36 @@ title: Is He Really My Lord?
 date: 2021-03-05 11:00:08+00:00
 draft: false
 tags:
-- christianity
+- christian-faith
 - devotional-notes
 translationKey: is-he-really-my-lord
 slug: is-he-really-my-lord
 source_hash: 760707623a748d569723b6330cd8fcfb58c2ae3b17b5c4df2071af0d20d97659
 ---
 
-Mar 5, 2021 at 6:56 AM
+**Mar 5, 2021 at 6:56 AM**
 
-I consider my life worth nothing to me; my only aim is to finish the race and complete the task the Lord Jesus has given me—the task of testifying to the good news of God's grace. (Acts 20:24 NIV)  
-…so that I may finish my race with joy, and the ministry which I received from the Lord Jesus…
+我却不以性命为念，也不看为宝贵，只要行完我的路程，成就我从主耶稣所领受的职事，证明　神恩惠的福音。（使徒行传 20:24 和合本）  
+...so that I may finish my race with joy, and the ministry which I received from the Lord Jesus...
 
-Chambers said that joy comes from fulfilling the purpose for which you were created and reborn, not from successfully completing a task.
+Oswald Chambers said, joy is completing my created and reborn purpose, not just successfully completing a task.
 
-While there is a certain joy, excitement, and sense of accomplishment in successfully completing a task—that "imitating God's creative activity"—more often, it fulfills one's own desires, pride, dignity. For whom are things done? With what intention?
+Sure, there is a joy, a sense of accomplishment, in "emulating God's creative work" when completing a task successfully. But often, it's about fulfilling personal desires, pride, and dignity. Who is the task for? What's the motive?
 
-Looking at the work I do now, even if it's for Christians or serving God's church, if I'm not careful, it could easily become about fulfilling my pride, showcasing my name through work.
+Look at my current work. Even if it's serving Christians and God's church, it can easily become a way to fulfill my pride, to make my name known.
 
-Every Christian has their own journey. What is my journey? What is the calling God has given me? Chambers said that need does not equal calling.
+Every Christian has their own path. What's my path? What's God's calling for me? Chambers said that "Need" is not the same as "Call."
 
-After becoming a Christian, I've been searching for "that one thing worth doing," or in other words, the "direction, dream, ideal" the world often speaks of. I've tried doing some things, but in the end, I don't find fulfillment, nor have I felt that certainty: This is God's calling for me.
+After becoming a Christian, I've been looking for "that one thing worth doing," or in worldly terms, "direction, dreams, ideals." I've tried doing some things, but in the end, I haven't found satisfaction or a certainty that this is God's calling for me.
 
-The result of not finding it is that I've stopped searching. So, I just look for where there's a need, what I can do. Is it my interest? I struggle to do things that "help others, benefit others." Benefiting others may not be wrong, but before God, my mindset is incorrect. I have given up seeking, asking God for the purpose He has for me; though what I do might benefit people, concerning God's calling, I am "derelict of duty."
+Not finding it led me to stop searching. So I just look for where there's a need (Need). What can I do? Is it my interest? I try to do "helpful" things. Helping others might not be wrong, but for God, my mindset is not right. I've stopped seeking and asking God about His will for me. Even if what I do is beneficial to others, regarding God's call, I'm "neglecting duty."
 
-For over two years, I've lived a life that seems retired, yet my heart seems to be in the wilderness. Compared to before, I believe my heart is more open and better prepared for God's calling.
+For more than two years, it feels like I've been living a retired life, but my heart seems in a wilderness. Compared to before, I think I'm more open to God's calling and better prepared.
 
-May the Lord help me not to stray from Him, but in connection with Him, understand His will for me and have the faith and courage to follow it. In Jesus' name, I pray.
+Lord, help me not to stray from You, but to understand Your will for me in connection with You. Give me faith and courage to follow it. In Jesus' name, amen.
 
-Gratitude:
+Thank God for:
 
-1. The collaboration with Tony has come to an end. I'm thankful for Tony's openness, honesty, and rapport during our partnership. It was a delightful experience. I wish Tony success in his upcoming projects, and that one day, he gets to know God;
-2. Thankful to Liza for helping solve design-related problems;
-3. Thanks to Linda's homeroom teacher and the instructors. Yesterday, Linda had half of her assignments, including the untouched math homework, left to finish by 9:30 PM. I asked her to stop and go to sleep immediately. Subsequently, I communicated with her homeroom teacher about the situation. I'm grateful for the teachers' understanding and support during Linda's adaptation to her new school.
+1. Wrapping up the collaboration with Tony. Thank you, Tony, for being open, honest, and in sync during our work together. It was a pleasant experience. I wish Tony success in his upcoming projects, and hope one day he will come to know God;
+2. Thank Liza for her help in solving design questions;
+3. Thank Linda's homeroom teacher and subject teachers. Last night, at 9:30 PM, Linda still had half her homework unfinished (she hadn't even started her math homework). I told her to stop and go to bed. Later, I communicated with her homeroom teacher. Thank the teachers for understanding and helping Linda during her adjustment period after transferring schools.

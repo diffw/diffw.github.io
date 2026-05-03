@@ -3,20 +3,21 @@ title: Life Without Limbs
 date: 2009-09-28 15:10:59+00:00
 draft: false
 tags:
-- christianity
-- witness
+- christian-faith
+- testimony
 translationKey: life-without-limbs
 slug: life-without-limbs
 source_hash: e0699cbfbdc996ab330b4e9dd962c5216d12860eee78e537f541903a172fd4a1
 ---
 
-Blockquote:
-I watched a short film, "Life Without Limbs," which is deeply moving. I'd like to share it with everyone here.
+Quote:
 
-The protagonist of this film is named Nick. He is a 24-year-old young man from Australia, born with a physical disability. From the shoulders, he has no upper limbs; from the hips, no lower limbs. His mother is a nurse, and his father is a pastor. There is no history of disability in either family, and his mother knew all the precautions to take during pregnancy. However, giving birth to a child with such a disability was a huge shock and test for them. When he was four months old, they brought him home and raised him. He has a younger brother and sister who are perfectly healthy.
+I came across a short film titled *Life Without Limbs*, which moved me deeply. I'm sharing it here for others.
 
-Nick now lives independently. He can walk by himself, go up and down stairs, get out of bed to wash his face, swim in the pool, turn on electrical devices, use a computer, and type 43 words per minute. He holds degrees in accounting and financial planning. Since the age of 19, he has dedicated his life to ministry, spreading the gospel and giving testimony to millions in more than 10 countries across Asia, Africa, and America. Many have repented and turned to God because of his testimony.
+The protagonist of this film is named Nick. He's a 24-year-old from Australia. Born without limbs—no arms from the shoulders, no legs from the hips. His mother is a nurse, and his father is a pastor. There's no history of disability in their families, and during his mother's pregnancy, she followed all the necessary precautions. Yet, having a child with such a condition was a huge blow and challenge for them. When he was four months old, they brought him home and raised him. He has one brother and one sister, both perfectly healthy.
 
-At the age of eight, Nick went through a low period. At that time, he prayed for God to give him limbs, but God did not grant this wish. He was once disheartened, but now he understands that his current situation is itself a miracle of God.
+Now, Nick can live independently, walk on his own, climb stairs, get up and wash himself, swim, turn on electrical switches, and operate a computer, typing 43 words per minute. He holds degrees in accounting and financial planning. Since the age of 19, he's dedicated himself to preaching, sharing the gospel in over ten countries across Asia, Africa, and the Americas, reaching millions. Many have repented and turned to God because of his testimony.
 
-It is God who gave faith to both his parents and himself, allowing them to know God's great love and understand His good intentions. They did not resent or lose heart but overcame many difficulties. If you watch the short film, in Nick's conversations with the pastor, you can feel the presence of God, who is a true and living God. From Nick's heartfelt smile and the joy that comes from God, even those of us with healthy limbs would feel ashamed. Nick does not need pity or sympathy from others; instead, he vividly demonstrates the great love of Lord Jesus Christ to the world. His English pronunciation is so clear that it is easy to follow along with the Chinese subtitles.
+At age eight, he hit a low point. He prayed for God to give him limbs, but God didn't. He felt discouraged, but now he understands that his condition itself is a miracle from God.
+
+God gave faith to him and his parents, helping them see His great love and understand His good purpose. They didn't blame fate or lose heart, overcoming many obstacles. If you watch this short film, in Nick's conversation with the pastor, you can sense God's presence—He is a true and living God. Nick's genuine smile, the joy that comes from God, should humble those of us with healthy bodies. Nick doesn't need pity or sympathy; instead, he vividly illustrates the great love of Jesus Christ to the world. His English is spoken so clearly that, with subtitles, anyone can follow along easily.
