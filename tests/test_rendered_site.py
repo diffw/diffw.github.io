@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
@@ -31,6 +32,7 @@ KNOWN_WORDPRESS_PAGE_ID = "1371"
 KNOWN_WORDPRESS_PAGE_REDIRECT = "/about/"
 KNOWN_WORDPRESS_ATTACHMENT_ID = "775"
 KNOWN_WORDPRESS_ATTACHMENT_REDIRECT = "/blog/2019/02/读书-富能仁传/"
+TOP_LEVEL_PAGE_PATHS = ("/about/", "/links/", "/now/", "/projects/")
 
 
 class AnchorParser(HTMLParser):
@@ -146,6 +148,13 @@ class RenderedSiteTests(unittest.TestCase):
             return "/"
         return path
 
+    def rss_item_links(self, rss_path: str) -> list[str]:
+        tree = ET.parse(self.output_dir / rss_path)
+        return [
+            link.text or ""
+            for link in tree.findall("./channel/item/link")
+        ]
+
     def test_homepage_exposes_archive_or_all_posts_affordance(self) -> None:
         affordance = self.find_archive_affordance()
         rendered_page = self.rendered_page_for_href(affordance["href"])
@@ -190,6 +199,9 @@ class RenderedSiteTests(unittest.TestCase):
 
         for html_page in html_pages:
             html = html_page.read_text(encoding="utf-8")
+            if '<meta http-equiv="refresh"' in html:
+                continue
+
             self.assertIn(
                 GOOGLE_ANALYTICS_SRC,
                 html,
@@ -233,6 +245,36 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertIn(f'"{KNOWN_WORDPRESS_ID}":"{KNOWN_WORDPRESS_REDIRECT}"', archive_html)
         self.assertIn(f'"{KNOWN_WORDPRESS_PAGE_ID}":"{KNOWN_WORDPRESS_PAGE_REDIRECT}"', archive_html)
         self.assertIn(f'"{KNOWN_WORDPRESS_ATTACHMENT_ID}":"{KNOWN_WORDPRESS_ATTACHMENT_REDIRECT}"', archive_html)
+
+    def test_rss_feeds_only_expose_language_specific_blog_posts(self) -> None:
+        zh_home_links = self.rss_item_links("index.xml")
+        zh_blog_links = self.rss_item_links("blog/index.xml")
+        en_home_links = self.rss_item_links("en/index.xml")
+        en_blog_links = self.rss_item_links("en/blog/index.xml")
+
+        self.assertGreater(len(zh_home_links), 0)
+        self.assertGreater(len(en_home_links), 0)
+        self.assertEqual(zh_home_links, zh_blog_links)
+        self.assertEqual(en_home_links, en_blog_links)
+        self.assertTrue(all(link.startswith("https://diff.im/blog/") for link in zh_home_links))
+        self.assertTrue(all(link.startswith("https://diff.im/en/blog/") for link in en_home_links))
+
+        all_feed_links = zh_home_links + zh_blog_links + en_home_links + en_blog_links
+        for page_path in TOP_LEVEL_PAGE_PATHS:
+            self.assertNotIn(f"https://diff.im{page_path}", all_feed_links)
+            self.assertNotIn(f"https://diff.im/en{page_path}", all_feed_links)
+
+    def test_pages_advertise_language_specific_blog_rss(self) -> None:
+        zh_home = (self.output_dir / "index.html").read_text(encoding="utf-8")
+        en_home = (self.output_dir / "en" / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn('href="https://diff.im/blog/index.xml"', zh_home)
+        self.assertIn('title="Diff客旅日志 Blog RSS"', zh_home)
+        self.assertNotIn('href="https://diff.im/index.xml"', zh_home)
+
+        self.assertIn('href="https://diff.im/en/blog/index.xml"', en_home)
+        self.assertIn("Diff&#39;s Pilgrimage Notes Blog RSS", en_home)
+        self.assertNotIn('href="https://diff.im/en/index.xml"', en_home)
 
     def test_robots_txt_mentions_sitemap(self) -> None:
         robots_txt = (self.output_dir / "robots.txt").read_text(encoding="utf-8")

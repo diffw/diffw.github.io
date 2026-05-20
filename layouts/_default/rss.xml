@@ -1,0 +1,50 @@
+{{- $postsSection := site.GetPage "section" "posts" -}}
+{{- $feedPage := . -}}
+{{- $pages := slice -}}
+{{- if .IsHome -}}
+  {{- if $postsSection -}}
+    {{- $feedPage = $postsSection -}}
+    {{- $pages = $postsSection.RegularPages -}}
+  {{- else -}}
+    {{- $pages = where site.RegularPages "Section" "posts" -}}
+  {{- end -}}
+{{- else if and .IsSection (eq .Section "posts") -}}
+  {{- $pages = .RegularPages -}}
+{{- else -}}
+  {{- $pages = where .Pages "Section" "posts" -}}
+{{- end -}}
+{{- $pages = $pages.ByDate.Reverse -}}
+{{- $limit := site.Config.Services.RSS.Limit -}}
+{{- if ge $limit 1 -}}
+  {{- $pages = first $limit $pages -}}
+{{- end -}}
+{{- $language := site.Language.LanguageCode | default site.Language.Lang -}}
+{{- $feedTitle := printf "%s Blog RSS" site.Title -}}
+{{- $feedDescription := printf "Recent blog posts on %s" site.Title -}}
+{{- "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ $feedTitle }}</title>
+    <link>{{ $feedPage.Permalink }}</link>
+    <description>{{ $feedDescription }}</description>
+    <generator>Hugo</generator>
+    <language>{{ $language }}</language>
+    {{- with index $pages 0 }}
+    <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>
+    {{- end }}
+    {{- with .OutputFormats.Get "RSS" }}
+    <atom:link href="{{ .Permalink }}" rel="self" type="application/rss+xml" />
+    {{- end }}
+    {{- range $pages }}
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      {{- if gt .Date.Unix 0 }}
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      {{- end }}
+      <guid>{{ .Permalink }}</guid>
+      <description>{{ .Summary | transform.XMLEscape | safeHTML }}</description>
+    </item>
+    {{- end }}
+  </channel>
+</rss>

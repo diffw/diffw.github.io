@@ -53,8 +53,10 @@
         {{ end }}
       {{ end }}
     {{ end }}
-    {{ with .OutputFormats.Get "RSS" }}
-      <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}">
+    {{ with site.GetPage "section" "posts" }}
+      {{ with .OutputFormats.Get "RSS" }}
+        <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }} Blog RSS">
+      {{ end }}
     {{ end }}
     {{ $schema := dict
       "@context" "https://schema.org"
