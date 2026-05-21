@@ -1,5 +1,6 @@
 ---
 title: One-Person Company Practice & The Indie Developer Who Can't Code - Week 6
+seo_title: One-Person Company, Week 6
 date: 2026-05-08 10:05:00-06:00
 draft: false
 tags:
@@ -8,8 +9,7 @@ slug: one-person-company-non-developer-week-6
 source_hash: a4d4eb6735e923ac269edbaa56e875daaa676f7d68e5f47a136b922596042ecd
 ---
 
-#
-MRR Goal: $1,000.00  This Week's Revenue: $0
+**MRR Goal:** $1,000.00  **This Week's Revenue:** $0
 
 Things Completed This Week
 1. The first MVP version of the second app is mostly done with core functionality, but it's still unstable. Next week, I can release a TestFlight beta version.

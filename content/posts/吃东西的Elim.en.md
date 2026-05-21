@@ -1,5 +1,6 @@
 ---
 title: Eather Eating
+description: "An old photo note of Eather eating."
 date: 2010-08-10 14:23:01+00:00
 draft: false
 tags:

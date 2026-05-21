@@ -236,6 +236,46 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertIn('"@type":"BlogPosting"', html)
         self.assertNotIn("0001-01-01T00:00:00Z", html)
 
+    def test_multilingual_pages_include_x_default_and_author_schema(self) -> None:
+        html = (self.output_dir / "en" / "blog" / "2026" / "05" / "choose-money-or-passion" / "index.html").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn('hreflang="zh-CN"', html)
+        self.assertIn('hreflang="en"', html)
+        self.assertIn('hreflang="x-default"', html)
+        self.assertIn('"@id":"https://diff.im/en/about/#person"', html)
+        self.assertIn('"url":"https://diff.im/en/about/"', html)
+
+    def test_taxonomy_pages_are_noindex_and_excluded_from_sitemaps(self) -> None:
+        zh_tag_html = (self.output_dir / "tags" / "life" / "index.html").read_text(encoding="utf-8")
+        en_tag_html = (self.output_dir / "en" / "tags" / "life" / "index.html").read_text(encoding="utf-8")
+        zh_sitemap = (self.output_dir / "zh-cn" / "sitemap.xml").read_text(encoding="utf-8")
+        en_sitemap = (self.output_dir / "en" / "sitemap.xml").read_text(encoding="utf-8")
+
+        self.assertIn('<meta name="robots" content="noindex,follow">', zh_tag_html)
+        self.assertIn('<meta name="robots" content="noindex,follow">', en_tag_html)
+        self.assertNotIn("/tags/", zh_sitemap)
+        self.assertNotIn("/tags/", en_sitemap)
+        self.assertNotIn("/categories/", zh_sitemap)
+        self.assertNotIn("/categories/", en_sitemap)
+        self.assertIn('hreflang="x-default"', zh_sitemap)
+        self.assertIn('hreflang="x-default"', en_sitemap)
+
+    def test_seo_title_override_keeps_article_heading(self) -> None:
+        html = (
+            self.output_dir
+            / "en"
+            / "blog"
+            / "2026"
+            / "05"
+            / "one-person-company-non-developer-week-6"
+            / "index.html"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("<title>One-Person Company, Week 6</title>", html)
+        self.assertIn("<h1>One-Person Company Practice &amp; The Indie Developer Who Can&#39;t Code - Week 6</h1>", html)
+
     def test_blog_archive_embeds_legacy_wordpress_query_redirect_map(self) -> None:
         archive_html = self.rendered_page_for_href("/blog/").read_text(encoding="utf-8")
         self.assertIn("window.location.pathname !== '/blog/'", archive_html)

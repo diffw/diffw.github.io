@@ -1,5 +1,6 @@
 ---
 title: Revisiting Midlife Career Crisis for Designers in the AI Era (And the Way Forward)
+seo_title: Designers and Midlife Crisis in the AI Era
 date: 2026-04-19 13:35:49+00:00
 draft: false
 tags:
