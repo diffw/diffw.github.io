@@ -266,6 +266,19 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertIn('"@id":"https://diff.im/en/about/#person"', html)
         self.assertIn('"url":"https://diff.im/en/about/"', html)
 
+    def test_language_auto_redirect_uses_translated_permalink(self) -> None:
+        zh_html = (
+            self.output_dir
+            / "blog"
+            / "2026"
+            / "04"
+            / "北美买房经验分享"
+            / "index.html"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn('var enTarget = "/en/blog/2026/04/homebuying-tips-from-four-houses/";', zh_html)
+        self.assertNotIn("'/en' +", zh_html)
+
     def test_taxonomy_pages_are_noindex_and_excluded_from_sitemaps(self) -> None:
         zh_tag_html = (self.output_dir / "tags" / "life" / "index.html").read_text(encoding="utf-8")
         en_tag_html = (self.output_dir / "en" / "tags" / "life" / "index.html").read_text(encoding="utf-8")

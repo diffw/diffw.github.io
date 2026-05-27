@@ -43,9 +43,11 @@
     {{ $ogLocale := cond $isEn "en_US" "zh_CN" }}
     {{ $schemaLang := cond $isEn "en" "zh-CN" }}
     {{ $xDefault := .Permalink }}
+    {{ $autoRedirectEnHref := "" }}
     {{ range .AllTranslations }}
       {{ if eq .Language.Lang "en" }}
         {{ $xDefault = .Permalink }}
+        {{ $autoRedirectEnHref = .RelPermalink }}
       {{ end }}
     {{ end }}
     {{ $authorSchema := dict
@@ -171,6 +173,7 @@
           var search = window.location.search || '';
           var hash = window.location.hash || '';
           var isEnPath = path === '/en' || path.indexOf('/en/') === 0;
+          var enTarget = {{ $autoRedirectEnHref | jsonify | safeJS }};
           var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
           var prefersZh = nav.indexOf('zh') === 0;
           var prefersEn = nav.indexOf('en') === 0;
@@ -185,8 +188,9 @@
 
           // Only auto-redirect zh -> en. Don't auto-redirect en -> zh: zh is the default
           // language, and a non-zh browser landing on /en is likely the right place.
-          if (!isEnPath && !prefersZh) {
-            var target = '/en' + (path === '/' ? '/' : path) + search + hash;
+          // Use Hugo's translated permalink; locale slugs are often different.
+          if (!isEnPath && !prefersZh && enTarget && enTarget !== path) {
+            var target = enTarget + search + hash;
             // Set cookie before navigating so the /en/ load doesn't loop.
             document.cookie = 'lang-pref=auto-redirected; Path=/; Max-Age=31536000; SameSite=Lax';
             window.location.replace(target);
