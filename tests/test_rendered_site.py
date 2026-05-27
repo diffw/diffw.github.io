@@ -6,9 +6,10 @@ import subprocess
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
+import posixpath
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,6 +34,22 @@ KNOWN_WORDPRESS_PAGE_REDIRECT = "/about/"
 KNOWN_WORDPRESS_ATTACHMENT_ID = "775"
 KNOWN_WORDPRESS_ATTACHMENT_REDIRECT = "/blog/2019/02/读书-富能仁传/"
 TOP_LEVEL_PAGE_PATHS = ("/about/", "/links/", "/now/", "/projects/")
+INTERNAL_HOSTS = {"diff.im", "www.diff.im"}
+NON_HTML_LINK_EXTENSIONS = (
+    ".avif",
+    ".css",
+    ".gif",
+    ".ico",
+    ".jpeg",
+    ".jpg",
+    ".js",
+    ".pdf",
+    ".png",
+    ".svg",
+    ".webp",
+    ".xml",
+    ".zip",
+)
 
 
 class AnchorParser(HTMLParser):
@@ -148,6 +165,39 @@ class RenderedSiteTests(unittest.TestCase):
             return "/"
         return path
 
+    def internal_html_target_for_href(self, source_page: Path, href: str) -> Path | None:
+        href = href.strip()
+        if not href or href.startswith(("#", "?")):
+            return None
+
+        parsed = urlparse(href)
+        scheme = parsed.scheme.lower()
+        if scheme in {"mailto", "tel", "javascript", "data"}:
+            return None
+        if scheme and scheme not in {"http", "https"}:
+            return None
+        if parsed.netloc and parsed.netloc not in INTERNAL_HOSTS:
+            return None
+
+        path = unquote(parsed.path)
+        if not path or path.endswith(NON_HTML_LINK_EXTENSIONS):
+            return None
+
+        if path.startswith("/"):
+            site_path = posixpath.normpath(path)
+        else:
+            source_parent = source_page.parent.relative_to(self.output_dir).as_posix()
+            source_dir = "/" if source_parent == "." else f"/{source_parent}"
+            site_path = posixpath.normpath(posixpath.join(source_dir, path))
+
+        if not site_path.startswith("/"):
+            site_path = f"/{site_path}"
+        if site_path == "/":
+            return self.output_dir / "index.html"
+        if site_path.endswith(".html"):
+            return self.output_dir / site_path.lstrip("/")
+        return self.output_dir / site_path.lstrip("/") / "index.html"
+
     def rss_item_links(self, rss_path: str) -> list[str]:
         tree = ET.parse(self.output_dir / rss_path)
         return [
@@ -232,6 +282,26 @@ class RenderedSiteTests(unittest.TestCase):
                 f"Google Analytics config is missing from {html_page.relative_to(self.output_dir)}",
             )
 
+    def test_custom_404_page_tracks_page_not_found_event(self) -> None:
+        not_found_page = self.output_dir / "404.html"
+        self.assertTrue(not_found_page.exists(), "GitHub Pages should receive a custom 404.html page.")
+
+        html = not_found_page.read_text(encoding="utf-8")
+
+        self.assertIn("页面不存在 / Page not found", html)
+        self.assertIn(GOOGLE_ANALYTICS_SRC, html)
+        self.assertIn(f"gtag('config', '{GOOGLE_ANALYTICS_ID}')", html)
+        self.assertIn("gtag('event', 'page_not_found'", html)
+        self.assertIn("document.addEventListener('DOMContentLoaded', adaptLanguageLinks)", html)
+        self.assertIn("['/blog/', '/en/blog/', 'Blog']", html)
+        self.assertIn("missing_path: path", html)
+        self.assertIn("missing_url: window.location.href", html)
+        self.assertIn("page_referrer: referrer", html)
+        self.assertIn("requested_lang: isEnglishPath ? 'en' : 'zh'", html)
+        self.assertIn("referrer_type: referrerType", html)
+        self.assertIn('<meta name="robots" content="noindex,follow">', html)
+        self.assertNotIn("https://diff.im/404.html", (self.output_dir / "sitemap.xml").read_text(encoding="utf-8"))
+
     def test_rendered_pages_include_canonical_links(self) -> None:
         html_pages = sorted(self.output_dir.rglob("*.html"))
         self.assertTrue(html_pages, "Rendered site should contain HTML pages.")
@@ -243,6 +313,31 @@ class RenderedSiteTests(unittest.TestCase):
                 r'<link rel="canonical" href="https://diff\.im/.+?"|<link rel="canonical" href="https://diff\.im/">',
                 f"Canonical link is missing from {html_page.relative_to(self.output_dir)}",
             )
+
+    def test_generated_internal_links_resolve_to_html_pages(self) -> None:
+        failures: list[str] = []
+        html_pages = sorted(self.output_dir.rglob("*.html"))
+
+        for html_page in html_pages:
+            relative_page = html_page.relative_to(self.output_dir)
+            if relative_page.parts and relative_page.parts[0] == "posts":
+                continue
+
+            parser = AnchorParser()
+            parser.feed(html_page.read_text(encoding="utf-8"))
+            for anchor in parser.anchors:
+                href = anchor["href"]
+                target = self.internal_html_target_for_href(html_page, href)
+                if target and not target.exists():
+                    failures.append(
+                        f"{relative_page}: {href} -> {target.relative_to(self.output_dir)}"
+                    )
+
+        self.assertFalse(
+            failures,
+            "Rendered generated pages contain internal links that do not resolve:\n"
+            + "\n".join(failures[:30]),
+        )
 
     def test_post_pages_include_description_and_social_metadata(self) -> None:
         post_pages = sorted(self.output_dir.glob("blog/*/*/*/index.html"))

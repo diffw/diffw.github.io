@@ -61,7 +61,7 @@
     <title>{{ $pageTitle }}</title>
     <link rel="canonical" href="{{ $canonical }}">
     <meta name="description" content="{{ $description }}">
-    <meta name="robots" content="{{ if $isTaxonomy }}noindex,follow{{ else }}index,follow,max-image-preview:large{{ end }}">
+    <meta name="robots" content="{{ if or $isTaxonomy (eq .Kind "404") }}noindex,follow{{ else }}index,follow,max-image-preview:large{{ end }}">
     <meta property="og:locale" content="{{ $ogLocale }}">
     <meta property="og:site_name" content="{{ site.Title }}">
     <meta property="og:type" content="{{ if $isPost }}article{{ else }}website{{ end }}">

@@ -1,0 +1,78 @@
+{{ define "main" }}
+  <section class="block not-found">
+    <div class="not-found-code mono">404</div>
+    <h1 class="h1">页面不存在 / Page not found</h1>
+    <div class="prose not-found-copy">
+      <p>这个地址没有对应的页面。你可以回到首页，或者继续查看博客文章。</p>
+      <p>This URL does not map to a published page. You can go home or keep reading the blog.</p>
+    </div>
+    <div class="not-found-actions">
+      <a class="module-link" id="not-found-home" href="{{ "" | relLangURL }}">首页 / Home &rarr;</a>
+      <a class="module-link" id="not-found-blog" href="{{ "blog/" | relLangURL }}">博客 / Blog &rarr;</a>
+    </div>
+  </section>
+
+  <script>
+    (function() {
+      try {
+        var path = window.location.pathname || '/';
+        var isEnglishPath = path === '/en' || path.indexOf('/en/') === 0;
+
+        function adaptLanguageLinks() {
+          var homeLink = document.getElementById('not-found-home');
+          var blogLink = document.getElementById('not-found-blog');
+          if (!isEnglishPath) return;
+
+          if (homeLink) {
+            homeLink.setAttribute('href', '/en/');
+            homeLink.innerHTML = 'Home &rarr;';
+          }
+          if (blogLink) {
+            blogLink.setAttribute('href', '/en/blog/');
+            blogLink.innerHTML = 'Blog &rarr;';
+          }
+
+          var brand = document.querySelector('.brand');
+          if (brand) brand.setAttribute('href', '/en/');
+
+          var navItems = [
+            ['/', '/en/', 'Home'],
+            ['/blog/', '/en/blog/', 'Blog'],
+            ['/projects/', '/en/projects/', 'Projects'],
+            ['/now/', '/en/now/', 'Now'],
+            ['/about/', '/en/about/', 'About'],
+            ['/links/', '/en/links/', 'Links']
+          ];
+          navItems.forEach(function(item) {
+            var link = document.querySelector('.side-nav a[href="' + item[0] + '"]');
+            if (!link) return;
+            link.setAttribute('href', item[1]);
+            link.textContent = item[2];
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', adaptLanguageLinks);
+        } else {
+          adaptLanguageLinks();
+        }
+
+        if (typeof gtag !== 'function') return;
+
+        var referrer = document.referrer || '';
+        var referrerType = 'direct';
+        if (referrer) {
+          referrerType = referrer.indexOf(window.location.origin + '/') === 0 ? 'internal' : 'external';
+        }
+
+        gtag('event', 'page_not_found', {
+          missing_path: path,
+          missing_url: window.location.href,
+          page_referrer: referrer,
+          requested_lang: isEnglishPath ? 'en' : 'zh',
+          referrer_type: referrerType
+        });
+      } catch (e) {}
+    })();
+  </script>
+{{ end }}

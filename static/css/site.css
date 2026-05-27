@@ -212,6 +212,28 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
   transform: translateX(2px);
 }
 
+.not-found {
+  padding-top: 16px;
+}
+
+.not-found-code {
+  margin-bottom: 14px;
+  font-size: var(--fs-s);
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+.not-found-copy {
+  margin-top: 18px;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  padding-top: 24px;
+}
+
 .content-foot {
   margin-top: 120px;
   padding-top: 24px;
