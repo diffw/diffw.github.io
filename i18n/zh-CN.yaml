@@ -12,6 +12,8 @@ next_post: 下一篇
 home_recent_posts: 最近文章
 home_all_posts: 全部文章
 home_about_me: 关于我
+home_my_projects: 我的项目
+home_all_projects: 全部项目
 
 # Parameterized: count, year_end
 posts_count:

@@ -175,6 +175,25 @@ class RenderedSiteTests(unittest.TestCase):
             rendered_page = self.rendered_page_for_href(href)
             self.assertTrue(rendered_page.exists(), f"导航页面未生成: {label} -> {href}")
 
+    def test_homepage_shows_projects_before_recent_posts(self) -> None:
+        projects_idx = self.homepage_html.index("我的项目")
+        posts_idx = self.homepage_html.index("最近文章")
+
+        self.assertLess(projects_idx, posts_idx)
+        self.assertIn("VibeCap - Screenshot for AI", self.homepage_html)
+        self.assertIn("Bible 2460 - Verse Clock", self.homepage_html)
+        self.assertIn("截图、标注，然后直接粘贴到 AI。", self.homepage_html)
+        self.assertIn("每一分钟，都有一句经文。", self.homepage_html)
+
+    def test_projects_page_uses_app_project_list(self) -> None:
+        projects_html = self.rendered_page_for_href("/projects/").read_text(encoding="utf-8")
+
+        self.assertIn('class="project-list"', projects_html)
+        self.assertIn("VibeCap - Screenshot for AI", projects_html)
+        self.assertIn("Bible 2460 - Verse Clock", projects_html)
+        self.assertIn("https://vibecap.dev/", projects_html)
+        self.assertIn("https://bible2460.com/", projects_html)
+
     def test_archive_or_all_posts_view_groups_posts_by_year(self) -> None:
         affordance = self.find_archive_affordance()
         archive_html = self.rendered_page_for_href(affordance["href"]).read_text(encoding="utf-8")

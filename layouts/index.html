@@ -19,6 +19,16 @@
     </div>
   </section>
 
+  <section class="block-tight home-projects">
+    <div class="sect-hd">
+      <div class="title">{{ i18n "home_my_projects" }}</div>
+    </div>
+    {{ partial "project_list.html" . }}
+    <div class="module-entry">
+      <a class="module-link" href="{{ "projects/" | relLangURL }}">{{ i18n "home_all_projects" }} &rarr;</a>
+    </div>
+  </section>
+
   <section class="block-tight home-feed">
     <div class="sect-hd">
       <div class="title">{{ i18n "home_recent_posts" }}</div>

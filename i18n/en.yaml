@@ -12,6 +12,8 @@ next_post: Next
 home_recent_posts: Recent Posts
 home_all_posts: All Posts
 home_about_me: About Me
+home_my_projects: My Projects
+home_all_projects: All Projects
 
 # Parameterized: count, year_end
 posts_count:

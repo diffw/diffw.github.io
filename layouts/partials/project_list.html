@@ -1,0 +1,17 @@
+{{ $lang := site.Language.Lang }}
+{{ $projectsResource := resources.Get "data/projects.yaml" }}
+{{ $projects := $projectsResource | transform.Unmarshal }}
+{{ with $projects }}
+  <div class="project-list">
+    {{ range . }}
+      {{ $intro := index .intro $lang | default .intro.en }}
+      <a class="project-row" href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+        <img class="project-icon" src="{{ .icon }}" alt="{{ .name }} icon" loading="lazy" width="48" height="48">
+        <span class="project-text">
+          <span class="project-title">{{ .name }}</span>
+          <span class="project-intro">{{ $intro }}</span>
+        </span>
+      </a>
+    {{ end }}
+  </div>
+{{ end }}

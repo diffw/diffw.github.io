@@ -181,6 +181,10 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
   max-width: var(--content-w);
 }
 
+.home-projects {
+  max-width: var(--content-w);
+}
+
 .home-intro .lede {
   margin-bottom: 0;
 }
@@ -358,6 +362,69 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
   overflow-wrap: anywhere;
 }
 a.post-row:hover .title { color: var(--accent); }
+
+/* ---------- Project list ---------- */
+.project-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 12px 0;
+  min-width: 0;
+}
+
+.prose a.project-row,
+.prose a.project-row:hover {
+  color: inherit;
+  border-bottom: 0;
+}
+
+.project-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid var(--rule);
+  object-fit: cover;
+  background: var(--rule);
+}
+
+.prose .project-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  border: 1px solid var(--rule);
+}
+
+.project-text {
+  display: block;
+  min-width: 0;
+}
+
+.project-title {
+  display: block;
+  font-size: var(--fs-m);
+  line-height: 1.35;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+  transition: color .15s var(--easing);
+}
+
+.project-intro {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--fs-s);
+  line-height: 1.5;
+  color: var(--fg-mute);
+  overflow-wrap: anywhere;
+}
+
+a.project-row:hover .project-title { color: var(--accent); }
 
 /* ---------- Year heading ---------- */
 .year-head {

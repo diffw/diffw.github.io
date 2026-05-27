@@ -1,0 +1,12 @@
+- name: VibeCap - Screenshot for AI
+  url: https://vibecap.dev/
+  icon: /images/projects/vibecap.png
+  intro:
+    zh-cn: 截图、标注，然后直接粘贴到 AI。
+    en: Capture, annotate, and paste to AI.
+- name: Bible 2460 - Verse Clock
+  url: https://bible2460.com/
+  icon: /images/projects/bible-2460.jpg
+  intro:
+    zh-cn: 每一分钟，都有一句经文。
+    en: Scripture every minute.
