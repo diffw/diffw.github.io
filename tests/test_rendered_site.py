@@ -33,6 +33,8 @@ KNOWN_WORDPRESS_PAGE_ID = "1371"
 KNOWN_WORDPRESS_PAGE_REDIRECT = "/about/"
 KNOWN_WORDPRESS_ATTACHMENT_ID = "775"
 KNOWN_WORDPRESS_ATTACHMENT_REDIRECT = "/blog/2019/02/读书-富能仁传/"
+TRANSLATED_ZH_POST_URL = "https://diff.im/blog/2026/05/%E9%80%89%E6%8B%A9%E9%92%B1%E5%A4%9A%E8%BF%98%E6%98%AF%E9%80%89%E6%8B%A9%E7%83%AD%E7%88%B1/"
+TRANSLATED_EN_POST_URL = "https://diff.im/en/blog/2026/05/choose-money-or-passion/"
 TOP_LEVEL_PAGE_PATHS = ("/about/", "/links/", "/now/", "/projects/")
 INTERNAL_HOSTS = {"diff.im", "www.diff.im"}
 NON_HTML_LINK_EXTENSIONS = (
@@ -205,6 +207,22 @@ class RenderedSiteTests(unittest.TestCase):
             for link in tree.findall("./channel/item/link")
         ]
 
+    def sitemap_alternates_for_loc(self, sitemap_path: str, loc: str) -> dict[str, str]:
+        ns = {
+            "sm": "http://www.sitemaps.org/schemas/sitemap/0.9",
+            "xhtml": "http://www.w3.org/1999/xhtml",
+        }
+        tree = ET.parse(self.output_dir / sitemap_path)
+        for url in tree.findall("./sm:url", ns):
+            loc_el = url.find("sm:loc", ns)
+            if loc_el is None or loc_el.text != loc:
+                continue
+            return {
+                link.attrib["hreflang"]: link.attrib["href"]
+                for link in url.findall("xhtml:link", ns)
+            }
+        self.fail(f"Could not find {loc} in {sitemap_path}")
+
     def test_homepage_exposes_archive_or_all_posts_affordance(self) -> None:
         affordance = self.find_archive_affordance()
         rendered_page = self.rendered_page_for_href(affordance["href"])
@@ -358,21 +376,53 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertIn('hreflang="zh-CN"', html)
         self.assertIn('hreflang="en"', html)
         self.assertIn('hreflang="x-default"', html)
+        self.assertIn(
+            f'hreflang="x-default" href="{TRANSLATED_EN_POST_URL}"',
+            html,
+        )
         self.assertIn('"@id":"https://diff.im/en/about/#person"', html)
         self.assertIn('"url":"https://diff.im/en/about/"', html)
 
-    def test_language_auto_redirect_uses_translated_permalink(self) -> None:
-        zh_html = (
-            self.output_dir
-            / "blog"
-            / "2026"
-            / "04"
-            / "北美买房经验分享"
-            / "index.html"
-        ).read_text(encoding="utf-8")
+    def test_sitemaps_use_configured_x_default_for_translated_pages(self) -> None:
+        zh_alternates = self.sitemap_alternates_for_loc("zh-cn/sitemap.xml", TRANSLATED_ZH_POST_URL)
+        en_alternates = self.sitemap_alternates_for_loc("en/sitemap.xml", TRANSLATED_EN_POST_URL)
 
-        self.assertIn('var enTarget = "/en/blog/2026/04/homebuying-tips-from-four-houses/";', zh_html)
-        self.assertNotIn("'/en' +", zh_html)
+        expected = {
+            "zh-CN": TRANSLATED_ZH_POST_URL,
+            "en": TRANSLATED_EN_POST_URL,
+            "x-default": TRANSLATED_EN_POST_URL,
+        }
+        self.assertEqual(zh_alternates, expected)
+        self.assertEqual(en_alternates, expected)
+
+    def test_language_auto_redirect_only_runs_on_default_homepage(self) -> None:
+        home_html = (self.output_dir / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn("var languageTargets = ", home_html)
+        self.assertIn('"zh-cn":"/"', home_html)
+        self.assertIn('"en":"/en/"', home_html)
+        self.assertIn('var fallbackLanguage = "en";', home_html)
+        self.assertIn("if (path !== '/') return;", home_html)
+        self.assertIn("window.location.replace(target + search + hash);", home_html)
+
+        stable_language_pages = [
+            self.output_dir / "blog" / "index.html",
+            self.output_dir / "about" / "index.html",
+            self.output_dir / "en" / "index.html",
+            self.output_dir / "en" / "about" / "index.html",
+            self.output_dir / "blog" / "2026" / "04" / "北美买房经验分享" / "index.html",
+            self.output_dir / "en" / "blog" / "2026" / "04" / "homebuying-tips-from-four-houses" / "index.html",
+        ]
+        for page_path in stable_language_pages:
+            html = page_path.read_text(encoding="utf-8")
+            self.assertNotIn("var languageTargets = ", html, f"Unexpected auto language redirect in {page_path}")
+            self.assertNotIn("lang-pref=auto-redirected", html, f"Unexpected auto language cookie in {page_path}")
+            self.assertNotIn(
+                "window.location.replace(target + search + hash);",
+                html,
+                f"Unexpected auto language navigation in {page_path}",
+            )
+            self.assertNotIn("var enTarget = ", html, f"Unexpected page-level English redirect in {page_path}")
 
     def test_taxonomy_pages_are_noindex_and_excluded_from_sitemaps(self) -> None:
         zh_tag_html = (self.output_dir / "tags" / "life" / "index.html").read_text(encoding="utf-8")

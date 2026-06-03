@@ -3,9 +3,14 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   {{ range .Data.Pages }}
     {{ if not (or (eq .Kind "taxonomy") (eq .Kind "term")) }}
+      {{ $xDefaultLang := lower (site.Param "i18n.xDefaultLang" | default "en") }}
+      {{ $xDefaultLangBase := replaceRE "-.*$" "" $xDefaultLang }}
       {{ $xDefault := .Permalink }}
       {{ range .AllTranslations }}
-        {{ if eq .Language.Lang "en" }}
+        {{ $translationLang := lower .Language.Lang }}
+        {{ $translationCode := lower (.Language.LanguageCode | default .Language.Lang) }}
+        {{ $translationBase := replaceRE "-.*$" "" $translationCode }}
+        {{ if or (eq $translationLang $xDefaultLang) (eq $translationCode $xDefaultLang) (eq $translationBase $xDefaultLang) (eq $translationLang $xDefaultLangBase) (eq $translationCode $xDefaultLangBase) }}
           {{ $xDefault = .Permalink }}
         {{ end }}
       {{ end }}

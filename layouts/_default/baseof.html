@@ -42,12 +42,21 @@
     {{ $isEn := eq site.Language.Lang "en" }}
     {{ $ogLocale := cond $isEn "en_US" "zh_CN" }}
     {{ $schemaLang := cond $isEn "en" "zh-CN" }}
+    {{ $xDefaultLang := lower (site.Param "i18n.xDefaultLang" | default "en") }}
+    {{ $xDefaultLangBase := replaceRE "-.*$" "" $xDefaultLang }}
     {{ $xDefault := .Permalink }}
-    {{ $autoRedirectEnHref := "" }}
+    {{ $languageRedirectTargets := dict }}
     {{ range .AllTranslations }}
-      {{ if eq .Language.Lang "en" }}
+      {{ $translationLang := lower .Language.Lang }}
+      {{ $translationCode := lower (.Language.LanguageCode | default .Language.Lang) }}
+      {{ $translationBase := replaceRE "-.*$" "" $translationCode }}
+      {{ if or (eq $translationLang $xDefaultLang) (eq $translationCode $xDefaultLang) (eq $translationBase $xDefaultLang) (eq $translationLang $xDefaultLangBase) (eq $translationCode $xDefaultLangBase) }}
         {{ $xDefault = .Permalink }}
-        {{ $autoRedirectEnHref = .RelPermalink }}
+      {{ end }}
+      {{ if and $.IsHome (eq site.Language.Lang "zh-cn") }}
+        {{ $langCode := lower (.Language.LanguageCode | default .Language.Lang) }}
+        {{ $langBase := replaceRE "-.*$" "" $langCode }}
+        {{ $languageRedirectTargets = merge $languageRedirectTargets (dict $langCode .RelPermalink $langBase .RelPermalink) }}
       {{ end }}
     {{ end }}
     {{ $authorSchema := dict
@@ -164,40 +173,53 @@
         }
       })();
     </script>
-    <script>
-      // Browser-language-based auto-redirect for first-time visitors.
-      // Honors a 'lang-pref' cookie once set (by either auto-redirect or user click).
-      (function(){
-        try {
-          var path = window.location.pathname || '/';
-          var search = window.location.search || '';
-          var hash = window.location.hash || '';
-          var isEnPath = path === '/en' || path.indexOf('/en/') === 0;
-          var enTarget = {{ $autoRedirectEnHref | jsonify | safeJS }};
-          var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
-          var prefersZh = nav.indexOf('zh') === 0;
-          var prefersEn = nav.indexOf('en') === 0;
+    {{ if and .IsHome (eq site.Language.Lang "zh-cn") }}
+      <script>
+        // Browser-language auto-redirect only runs on the neutral default entry.
+        // Language-specific URLs stay stable for users, crawlers, and hreflang.
+        (function(){
+          try {
+            var path = window.location.pathname || '/';
+            if (path !== '/') return;
 
-          // Respect explicit user preference.
-          var cookie = document.cookie || '';
-          if (cookie.indexOf('lang-pref=') !== -1) return;
+            var search = window.location.search || '';
+            var hash = window.location.hash || '';
+            var languageTargets = {{ $languageRedirectTargets | jsonify | safeJS }};
+            var fallbackLanguage = {{ $xDefaultLang | jsonify | safeJS }};
+            var fallbackTarget = languageTargets[fallbackLanguage]
+              || languageTargets[fallbackLanguage.split('-')[0]]
+              || languageTargets.en
+              || null;
+            var browserLanguages = navigator.languages && navigator.languages.length
+              ? navigator.languages
+              : [navigator.language || navigator.userLanguage || ''];
 
-          // Already on the right side for the browser preference: no-op.
-          if (isEnPath && prefersEn) return;
-          if (!isEnPath && prefersZh) return;
+            // Respect explicit user preference.
+            var cookie = document.cookie || '';
+            if (cookie.indexOf('lang-pref=') !== -1) return;
 
-          // Only auto-redirect zh -> en. Don't auto-redirect en -> zh: zh is the default
-          // language, and a non-zh browser landing on /en is likely the right place.
-          // Use Hugo's translated permalink; locale slugs are often different.
-          if (!isEnPath && !prefersZh && enTarget && enTarget !== path) {
-            var target = enTarget + search + hash;
-            // Set cookie before navigating so the /en/ load doesn't loop.
+            function targetForLanguage(rawLang) {
+              var lang = String(rawLang || '').toLowerCase();
+              if (!lang) return null;
+              if (languageTargets[lang]) return languageTargets[lang];
+              var baseLang = lang.split('-')[0];
+              return languageTargets[baseLang] || null;
+            }
+
+            var target = null;
+            for (var i = 0; i < browserLanguages.length; i++) {
+              target = targetForLanguage(browserLanguages[i]);
+              if (target) break;
+            }
+            if (!target && fallbackTarget) target = fallbackTarget;
+            if (!target || target === path) return;
+
             document.cookie = 'lang-pref=auto-redirected; Path=/; Max-Age=31536000; SameSite=Lax';
-            window.location.replace(target);
-          }
-        } catch (e) { /* fail-open: render the current page */ }
-      })();
-    </script>
+            window.location.replace(target + search + hash);
+          } catch (e) { /* fail-open: render the current page */ }
+        })();
+      </script>
+    {{ end }}
   </head>
   <body>
     {{ $permalink := .Permalink }}

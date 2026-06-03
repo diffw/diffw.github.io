@@ -4,6 +4,11 @@ defaultContentLanguageInSubdir: false
 timeZone: America/Chicago
 enableRobotsTXT: true
 
+params:
+  i18n:
+    # Fallback language for unmatched browser languages and hreflang x-default.
+    xDefaultLang: en
+
 frontmatter:
   date:
     - date
