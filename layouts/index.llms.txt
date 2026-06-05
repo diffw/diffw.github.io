@@ -1,0 +1,18 @@
+{{- /* llms.txt content map — see https://llmstxt.org */ -}}
+# {{ site.Title }}
+
+{{ with site.Params.description }}> {{ . | plainify | htmlUnescape }}
+{{ end }}
+## Pages
+{{ range slice "/about" "/now" "/projects" "/links" -}}
+{{ with site.GetPage . }}- [{{ .Title }}]({{ .Permalink }}){{ with .Description }}: {{ . | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace }}{{ end }}
+{{ end -}}
+{{ end }}
+## Posts
+{{ range first 50 (where site.RegularPages "Section" "posts") -}}
+- [{{ .Title }}]({{ .Permalink }}) — {{ .Date.Format "2006-01-02" }}{{ with .Summary }}: {{ . | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace | truncate 200 }}{{ end }}
+{{ end }}
+## More
+- Full archive (all languages): {{ "sitemap.xml" | absURL }}
+{{- with site.GetPage "section" "posts" }}{{ with .OutputFormats.Get "RSS" }}
+- RSS feed: {{ .Permalink }}{{ end }}{{ end }}

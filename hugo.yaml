@@ -4,6 +4,20 @@ defaultContentLanguageInSubdir: false
 timeZone: America/Chicago
 enableRobotsTXT: true
 
+# Plain-text content map for LLM crawlers (llmstxt.org), emitted at /llms.txt
+# (and /en/llms.txt) from layouts/index.llms.txt.
+outputFormats:
+  LLMS:
+    mediaType: text/plain
+    baseName: llms
+    isPlainText: true
+    rel: alternate
+outputs:
+  home:
+    - HTML
+    - RSS
+    - LLMS
+
 params:
   i18n:
     # Fallback language for unmatched browser languages and hreflang x-default.
