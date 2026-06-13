@@ -38,6 +38,9 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install -r requirements.txt
 
+      - name: Prepare legacy redirects
+        run: python scripts/prepare_public_aliases.py
+
       - name: Test
         run: python -m unittest discover -s tests
 

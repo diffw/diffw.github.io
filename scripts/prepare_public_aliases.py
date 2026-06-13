@@ -6,7 +6,9 @@ import argparse
 import subprocess
 import tempfile
 import shutil
+from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import unquote, urlparse, urlunparse
 
 
 def parse_args() -> argparse.Namespace:
@@ -59,6 +61,36 @@ def build_redirect_html(target_url: str) -> str:
 """
 
 
+class CanonicalLinkParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.canonical_href: str | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "link":
+            return
+
+        attrs_map = {key: value or "" for key, value in attrs}
+        if attrs_map.get("rel") == "canonical" and attrs_map.get("href"):
+            self.canonical_href = attrs_map["href"]
+
+
+def canonical_url_for_page(page: Path, fallback_url: str) -> str:
+    parser = CanonicalLinkParser()
+    parser.feed(page.read_text(encoding="utf-8", errors="ignore"))
+    canonical_href = parser.canonical_href
+    if not canonical_href:
+        return fallback_url
+
+    canonical_path = unquote(urlparse(canonical_href).path)
+    fallback_path = unquote(urlparse(fallback_url).path)
+    if canonical_path == fallback_path:
+        return fallback_url
+
+    parsed = urlparse(canonical_href)
+    return urlunparse(parsed._replace(path=unquote(parsed.path)))
+
+
 def main() -> int:
     args = parse_args()
     repo_root = args.repo_root.expanduser().resolve()
@@ -93,7 +125,7 @@ def main() -> int:
             blog_path = "/blog/"
             if rel_dir != Path("."):
                 blog_path = f"/blog/{rel_dir.as_posix().strip('/')}/"
-            target_url = f"{site_url}{blog_path}"
+            target_url = canonical_url_for_page(canonical_page, f"{site_url}{blog_path}")
 
             (redirect_dir / "index.html").write_text(build_redirect_html(target_url), encoding="utf-8")
             redirect_count += 1

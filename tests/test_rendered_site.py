@@ -84,6 +84,20 @@ class AnchorParser(HTMLParser):
         self._current_label_parts = []
 
 
+class CanonicalLinkParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.href: str | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "link":
+            return
+
+        attrs_map = {key: value or "" for key, value in attrs}
+        if attrs_map.get("rel") == "canonical" and attrs_map.get("href"):
+            self.href = attrs_map["href"]
+
+
 def normalize_href(href: str) -> str:
     parsed = urlparse(href)
     path = parsed.path or href
@@ -156,6 +170,11 @@ class RenderedSiteTests(unittest.TestCase):
         if path.endswith(".html"):
             return self.output_dir / path.lstrip("/")
         return self.output_dir / path.lstrip("/") / "index.html"
+
+    def canonical_href_for_page(self, page: Path) -> str | None:
+        parser = CanonicalLinkParser()
+        parser.feed(page.read_text(encoding="utf-8"))
+        return parser.href
 
     def site_relative_href(self, href: str) -> str:
         path = normalize_href(href)
@@ -261,6 +280,62 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertTrue(archive_page.exists(), "Legacy /posts/ archive path should still resolve after moving canonicals to /blog/.")
         archive_html = archive_page.read_text(encoding="utf-8")
         self.assertIn("https://diff.im/blog/", archive_html)
+
+    def test_legacy_posts_redirect_targets_resolve(self) -> None:
+        legacy_pages = sorted((self.output_dir / "posts").rglob("index.html"))
+        self.assertTrue(legacy_pages, "Legacy /posts/ redirects should be rendered.")
+
+        failures: list[str] = []
+        for legacy_page in legacy_pages:
+            canonical_href = self.canonical_href_for_page(legacy_page)
+            if not canonical_href:
+                failures.append(f"{legacy_page.relative_to(self.output_dir)} is missing a canonical redirect target")
+                continue
+
+            target = self.internal_html_target_for_href(legacy_page, canonical_href)
+            if target is None:
+                failures.append(f"{legacy_page.relative_to(self.output_dir)} points outside the site: {canonical_href}")
+                continue
+
+            if not target.exists():
+                failures.append(
+                    f"{legacy_page.relative_to(self.output_dir)} -> {canonical_href} -> {target.relative_to(self.output_dir)}"
+                )
+
+        self.assertFalse(
+            failures,
+            "Legacy /posts/ redirects point at missing pages:\n" + "\n".join(failures[:30]),
+        )
+
+    def test_recent_changed_article_aliases_resolve(self) -> None:
+        aliases = [
+            "/en/blog/2026/06/why-keep-kids-piano-lessons-without-talent/",
+            "/blog/2026/04/ai时代再谈设计师-35-岁职业危机/",
+            "/posts/2026/04/ai时代再谈设计师-35-岁职业危机/",
+            "/blog/2016/08/淫乱/",
+            "/posts/2016/08/淫乱/",
+        ]
+
+        failures: list[str] = []
+        for alias in aliases:
+            alias_page = self.rendered_page_for_href(alias)
+            if not alias_page.exists():
+                failures.append(f"{alias} did not render an alias page")
+                continue
+
+            canonical_href = self.canonical_href_for_page(alias_page)
+            if not canonical_href:
+                failures.append(f"{alias} is missing a canonical target")
+                continue
+
+            target = self.internal_html_target_for_href(alias_page, canonical_href)
+            if target is None or not target.exists():
+                failures.append(f"{alias} -> {canonical_href} did not resolve to a rendered page")
+
+        self.assertFalse(
+            failures,
+            "Changed article aliases should resolve to existing article pages:\n" + "\n".join(failures),
+        )
 
     def test_google_analytics_is_present_on_every_rendered_html_page(self) -> None:
         html_pages = sorted(self.output_dir.rglob("*.html"))
