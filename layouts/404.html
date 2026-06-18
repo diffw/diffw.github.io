@@ -59,18 +59,82 @@
 
         if (typeof gtag !== 'function') return;
 
+        var search = window.location.search || '';
+        var params = new URLSearchParams(search);
         var referrer = document.referrer || '';
         var referrerType = 'direct';
         if (referrer) {
           referrerType = referrer.indexOf(window.location.origin + '/') === 0 ? 'internal' : 'external';
         }
+        var referrerHost = '';
+        var referrerPath = '';
+        if (referrer) {
+          try {
+            var referrerUrl = new URL(referrer);
+            referrerHost = referrerUrl.hostname;
+            if (referrerUrl.origin === window.location.origin) {
+              referrerPath = referrerUrl.pathname || '/';
+            }
+          } catch (e) {}
+        }
+
+        function queryTypeFor404() {
+          if (params.has('p')) return 'wordpress_post_id';
+          if (params.has('page_id')) return 'wordpress_page_id';
+          if (params.has('attachment_id')) return 'wordpress_attachment_id';
+          return 'none';
+        }
+
+        function extensionForPath() {
+          var match = path.match(/\.([a-z0-9]{1,8})$/i);
+          return match ? match[1].toLowerCase() : 'none';
+        }
+
+        function langPrefState() {
+          var cookie = document.cookie || '';
+          if (cookie.indexOf('lang-pref=auto-redirected') !== -1) return 'auto_redirected';
+          if (cookie.indexOf('lang-pref=') !== -1) return 'manual_preference';
+          return 'none';
+        }
+
+        function bucketForPath() {
+          if (path === '/404.html' || path === '/en/404.html') return '/404.html';
+          if (path === '/blog/' && queryTypeFor404() !== 'none') return '/blog/?wordpress_id';
+          if (path.indexOf('/blog/wp-content/uploads/') === 0 || path.indexOf('/wp-content/uploads/') === 0) return '/wp-content/uploads/*';
+          if (path === '/posts' || path.indexOf('/posts/') === 0) return '/posts/*';
+          if (/^\/en\/blog\/\d{4}\/\d{2}\//.test(path)) return '/en/blog/YYYY/MM/*';
+          if (/^\/blog\/\d{4}\/\d{2}\//.test(path)) return '/blog/YYYY/MM/*';
+          if (path === '/en' || path.indexOf('/en/') === 0) return '/en/*';
+          return 'other';
+        }
+
+        function reasonFor404() {
+          var queryType = queryTypeFor404();
+          var state = langPrefState();
+          if (path === '/404.html' || path === '/en/404.html') return 'direct_404_template';
+          if (path === '/blog/' && queryType !== 'none') return 'legacy_wordpress_query';
+          if (path.indexOf('/blog/wp-content/uploads/') === 0 || path.indexOf('/wp-content/uploads/') === 0) return 'legacy_wordpress_upload';
+          if (path === '/posts' || path.indexOf('/posts/') === 0) return 'legacy_posts_path';
+          if (isEnglishPath && referrerType === 'internal' && state === 'auto_redirected') return 'language_auto_redirect_candidate';
+          if (/^\/en\/blog\/\d{4}\/\d{2}\//.test(path)) return 'missing_english_post_path';
+          if (/^\/blog\/\d{4}\/\d{2}\//.test(path)) return 'legacy_blog_post_path';
+          if (isEnglishPath) return 'missing_english_path';
+          return 'unknown';
+        }
 
         gtag('event', 'page_not_found', {
           missing_path: path,
           missing_url: window.location.href,
+          missing_path_bucket: bucketForPath(),
+          missing_extension: extensionForPath(),
+          not_found_reason: reasonFor404(),
           page_referrer: referrer,
+          referrer_host: referrerHost,
+          referrer_path: referrerPath,
           requested_lang: isEnglishPath ? 'en' : 'zh',
-          referrer_type: referrerType
+          referrer_type: referrerType,
+          legacy_query_type: queryTypeFor404(),
+          lang_pref_state: langPrefState()
         });
       } catch (e) {}
     })();

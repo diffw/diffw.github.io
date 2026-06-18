@@ -73,8 +73,8 @@ python3 -m unittest discover -s tests
 
 下面这些是从老 WordPress 站点迁移过来的副产物，不参与日常发文流程，按需手动跑：
 
-- `scripts/generate_seo_migration_artifacts.py`、`scripts/generate_nginx_*.py`、`scripts/import_wordpress_xml.py`、`scripts/prepare_public_aliases.py`
-- `data/wordpress_*_map.json`、`data/wordpress-url-map.csv`
+- `scripts/generate_seo_migration_artifacts.py`、`scripts/normalize_wordpress_redirect_maps.py`、`scripts/generate_nginx_*.py`、`scripts/import_wordpress_xml.py`、`scripts/prepare_public_aliases.py`
+- `data/wordpress_*_map.json`、`data/wordpress-url-map.csv`、`data/legacy-path-redirects.csv`
 - `ops/nginx/*.conf`
 - `docs/seo-migration-audit.md`
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import csv
+import json
 import re
 import shutil
 import subprocess
@@ -32,7 +34,7 @@ KNOWN_WORDPRESS_REDIRECT = "/blog/2020/07/买了把有点贵的人体工学椅-h
 KNOWN_WORDPRESS_PAGE_ID = "1371"
 KNOWN_WORDPRESS_PAGE_REDIRECT = "/about/"
 KNOWN_WORDPRESS_ATTACHMENT_ID = "775"
-KNOWN_WORDPRESS_ATTACHMENT_REDIRECT = "/blog/2019/02/读书-富能仁传/"
+KNOWN_WORDPRESS_ATTACHMENT_REDIRECT = "/blog/2019/02/读书笔记富能仁传/"
 TOP_LEVEL_PAGE_PATHS = ("/about/", "/links/", "/now/", "/projects/")
 INTERNAL_HOSTS = {"diff.im", "www.diff.im"}
 NON_HTML_LINK_EXTENSIONS = (
@@ -82,6 +84,20 @@ class AnchorParser(HTMLParser):
         self.anchors.append({"href": self._current_href, "label": label})
         self._current_href = None
         self._current_label_parts = []
+
+
+class CanonicalLinkParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.href: str | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "link":
+            return
+
+        attrs_map = {key: value or "" for key, value in attrs}
+        if attrs_map.get("rel") == "canonical" and attrs_map.get("href"):
+            self.href = attrs_map["href"]
 
 
 def normalize_href(href: str) -> str:
@@ -156,6 +172,11 @@ class RenderedSiteTests(unittest.TestCase):
         if path.endswith(".html"):
             return self.output_dir / path.lstrip("/")
         return self.output_dir / path.lstrip("/") / "index.html"
+
+    def canonical_href_for_page(self, page: Path) -> str | None:
+        parser = CanonicalLinkParser()
+        parser.feed(page.read_text(encoding="utf-8"))
+        return parser.href
 
     def site_relative_href(self, href: str) -> str:
         path = normalize_href(href)
@@ -262,6 +283,97 @@ class RenderedSiteTests(unittest.TestCase):
         archive_html = archive_page.read_text(encoding="utf-8")
         self.assertIn("https://diff.im/blog/", archive_html)
 
+    def test_legacy_posts_redirect_targets_resolve(self) -> None:
+        legacy_pages = sorted((self.output_dir / "posts").rglob("index.html"))
+        self.assertTrue(legacy_pages, "Legacy /posts/ redirects should be rendered.")
+
+        failures: list[str] = []
+        for legacy_page in legacy_pages:
+            canonical_href = self.canonical_href_for_page(legacy_page)
+            if not canonical_href:
+                failures.append(f"{legacy_page.relative_to(self.output_dir)} is missing a canonical redirect target")
+                continue
+
+            target = self.internal_html_target_for_href(legacy_page, canonical_href)
+            if target is None:
+                failures.append(f"{legacy_page.relative_to(self.output_dir)} points outside the site: {canonical_href}")
+                continue
+
+            if not target.exists():
+                failures.append(
+                    f"{legacy_page.relative_to(self.output_dir)} -> {canonical_href} -> {target.relative_to(self.output_dir)}"
+                )
+
+        self.assertFalse(
+            failures,
+            "Legacy /posts/ redirects point at missing pages:\n" + "\n".join(failures[:30]),
+        )
+
+    def test_recent_changed_article_aliases_resolve(self) -> None:
+        aliases = [
+            "/en/blog/2026/06/why-keep-kids-piano-lessons-without-talent/",
+            "/blog/2026/04/ai时代再谈设计师-35-岁职业危机/",
+            "/posts/2026/04/ai时代再谈设计师-35-岁职业危机/",
+            "/blog/2016/08/淫乱/",
+            "/posts/2016/08/淫乱/",
+        ]
+
+        failures: list[str] = []
+        for alias in aliases:
+            alias_page = self.rendered_page_for_href(alias)
+            if not alias_page.exists():
+                failures.append(f"{alias} did not render an alias page")
+                continue
+
+            canonical_href = self.canonical_href_for_page(alias_page)
+            if not canonical_href:
+                failures.append(f"{alias} is missing a canonical target")
+                continue
+
+            target = self.internal_html_target_for_href(alias_page, canonical_href)
+            if target is None or not target.exists():
+                failures.append(f"{alias} -> {canonical_href} did not resolve to a rendered page")
+
+        self.assertFalse(
+            failures,
+            "Changed article aliases should resolve to existing article pages:\n" + "\n".join(failures),
+        )
+
+    def test_ga_404_legacy_path_redirects_resolve(self) -> None:
+        with (ROOT / "data" / "legacy-path-redirects.csv").open("r", encoding="utf-8", newline="") as handle:
+            redirects = list(csv.DictReader(handle))
+
+        self.assertTrue(redirects, "GA-discovered legacy 404 redirects should be recorded.")
+
+        failures: list[str] = []
+        for row in redirects:
+            legacy_path = row["legacy_path"]
+            target_path = row["target_path"]
+            legacy_page = self.rendered_page_for_href(legacy_path)
+            if not legacy_page.exists():
+                failures.append(f"{legacy_path} did not render a static redirect page")
+                continue
+
+            canonical_href = self.canonical_href_for_page(legacy_page)
+            if not canonical_href:
+                failures.append(f"{legacy_path} is missing a canonical target")
+                continue
+
+            canonical_path = normalize_href(unquote(urlparse(canonical_href).path))
+            expected_path = normalize_href(target_path)
+            if canonical_path != expected_path:
+                failures.append(f"{legacy_path} -> {canonical_path}, expected {expected_path}")
+                continue
+
+            target = self.rendered_page_for_href(target_path)
+            if not target.exists():
+                failures.append(f"{legacy_path} target does not exist: {target_path}")
+
+        self.assertFalse(
+            failures,
+            "GA-discovered legacy 404 redirects should resolve to existing pages:\n" + "\n".join(failures),
+        )
+
     def test_google_analytics_is_present_on_every_rendered_html_page(self) -> None:
         html_pages = sorted(self.output_dir.rglob("*.html"))
         self.assertTrue(html_pages, "Rendered site should contain HTML pages.")
@@ -296,9 +408,19 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertIn("['/blog/', '/en/blog/', 'Blog']", html)
         self.assertIn("missing_path: path", html)
         self.assertIn("missing_url: window.location.href", html)
+        self.assertIn("missing_path_bucket: bucketForPath()", html)
+        self.assertIn("missing_extension: extensionForPath()", html)
+        self.assertIn("not_found_reason: reasonFor404()", html)
         self.assertIn("page_referrer: referrer", html)
+        self.assertIn("referrer_host: referrerHost", html)
+        self.assertIn("referrer_path: referrerPath", html)
         self.assertIn("requested_lang: isEnglishPath ? 'en' : 'zh'", html)
         self.assertIn("referrer_type: referrerType", html)
+        self.assertIn("legacy_query_type: queryTypeFor404()", html)
+        self.assertIn("lang_pref_state: langPrefState()", html)
+        self.assertIn("language_auto_redirect_candidate", html)
+        self.assertIn("direct_404_template", html)
+        self.assertIn("legacy_wordpress_query", html)
         self.assertIn('<meta name="robots" content="noindex,follow">', html)
         self.assertNotIn("https://diff.im/404.html", (self.output_dir / "sitemap.xml").read_text(encoding="utf-8"))
 
@@ -373,6 +495,11 @@ class RenderedSiteTests(unittest.TestCase):
 
         self.assertIn('var enTarget = "/en/blog/2026/04/homebuying-tips-from-four-houses/";', zh_html)
         self.assertNotIn("'/en' +", zh_html)
+        self.assertIn("gtag('event', 'language_auto_redirect'", zh_html)
+        self.assertIn("redirect_to: enTarget", zh_html)
+        self.assertIn("redirect_has_translation: 'true'", zh_html)
+        self.assertIn("language_auto_redirect_skipped", zh_html)
+        self.assertIn("redirect_reason: 'missing_en_translation'", zh_html)
 
     def test_taxonomy_pages_are_noindex_and_excluded_from_sitemaps(self) -> None:
         zh_tag_html = (self.output_dir / "tags" / "life" / "index.html").read_text(encoding="utf-8")
@@ -412,6 +539,39 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertIn(f'"{KNOWN_WORDPRESS_ID}":"{KNOWN_WORDPRESS_REDIRECT}"', archive_html)
         self.assertIn(f'"{KNOWN_WORDPRESS_PAGE_ID}":"{KNOWN_WORDPRESS_PAGE_REDIRECT}"', archive_html)
         self.assertIn(f'"{KNOWN_WORDPRESS_ATTACHMENT_ID}":"{KNOWN_WORDPRESS_ATTACHMENT_REDIRECT}"', archive_html)
+
+    def test_wordpress_query_redirect_targets_resolve(self) -> None:
+        map_files = [
+            ROOT / "data" / "wordpress_id_map.json",
+            ROOT / "data" / "wordpress_page_id_map.json",
+            ROOT / "data" / "wordpress_attachment_id_map.json",
+        ]
+
+        failures: list[str] = []
+        for map_file in map_files:
+            redirects = json.loads(map_file.read_text(encoding="utf-8"))
+            self.assertIsInstance(redirects, dict)
+            for legacy_id, target_path in redirects.items():
+                target = self.rendered_page_for_href(str(target_path))
+                if not target.exists():
+                    failures.append(f"{map_file.name}:{legacy_id} -> {target_path}")
+
+        self.assertFalse(
+            failures,
+            "WordPress query redirect maps point at missing pages:\n" + "\n".join(failures[:40]),
+        )
+
+    def test_wordpress_post_csv_and_json_redirect_maps_match(self) -> None:
+        with (ROOT / "data" / "wordpress-url-map.csv").open("r", encoding="utf-8", newline="") as handle:
+            csv_map = {
+                row["wordpress_id"]: row["new_url"]
+                for row in csv.DictReader(handle)
+                if row.get("wordpress_id") and row.get("new_url")
+            }
+
+        json_map = json.loads((ROOT / "data" / "wordpress_id_map.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(csv_map, json_map)
 
     def test_rss_feeds_only_expose_language_specific_blog_posts(self) -> None:
         zh_home_links = self.rss_item_links("index.xml")
