@@ -177,6 +177,7 @@
           var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
           var prefersZh = nav.indexOf('zh') === 0;
           var prefersEn = nav.indexOf('en') === 0;
+          var browserLangFamily = prefersZh ? 'zh' : (prefersEn ? 'en' : 'other');
 
           // Respect explicit user preference.
           var cookie = document.cookie || '';
@@ -191,9 +192,46 @@
           // Use Hugo's translated permalink; locale slugs are often different.
           if (!isEnPath && !prefersZh && enTarget && enTarget !== path) {
             var target = enTarget + search + hash;
+            function navigateToTranslatedPage() {
+              window.location.replace(target);
+            }
             // Set cookie before navigating so the /en/ load doesn't loop.
             document.cookie = 'lang-pref=auto-redirected; Path=/; Max-Age=31536000; SameSite=Lax';
-            window.location.replace(target);
+            if (typeof gtag !== 'function') {
+              navigateToTranslatedPage();
+              return;
+            }
+
+            var navigated = false;
+            function navigateOnce() {
+              if (navigated) return;
+              navigated = true;
+              navigateToTranslatedPage();
+            }
+            var fallbackTimer = window.setTimeout(navigateOnce, 500);
+            gtag('event', 'language_auto_redirect', {
+              redirect_from: path,
+              redirect_to: enTarget,
+              redirect_reason: prefersEn ? 'browser_en' : 'browser_non_zh',
+              browser_language_family: browserLangFamily,
+              redirect_has_translation: 'true',
+              transport_type: 'beacon',
+              event_callback: function() {
+                window.clearTimeout(fallbackTimer);
+                navigateOnce();
+              },
+              event_timeout: 500
+            });
+            return;
+          }
+
+          if (!isEnPath && !prefersZh && !enTarget && typeof gtag === 'function') {
+            gtag('event', 'language_auto_redirect_skipped', {
+              redirect_from: path,
+              redirect_reason: 'missing_en_translation',
+              browser_language_family: browserLangFamily,
+              redirect_has_translation: 'false'
+            });
           }
         } catch (e) { /* fail-open: render the current page */ }
       })();

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import subprocess
 import tempfile
 import shutil
@@ -13,7 +14,7 @@ from urllib.parse import unquote, urlparse, urlunparse
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate static /posts redirect pages that point to canonical /blog URLs."
+        description="Generate static legacy redirect pages that point to canonical /blog URLs."
     )
     parser.add_argument(
         "--repo-root",
@@ -31,6 +32,12 @@ def parse_args() -> argparse.Namespace:
         "--site-url",
         default="https://diff.im",
         help="Public site origin used in redirect targets",
+    )
+    parser.add_argument(
+        "--legacy-path-map",
+        default=Path(__file__).resolve().parents[1] / "data" / "legacy-path-redirects.csv",
+        type=Path,
+        help="CSV of GA/Search Console legacy paths that should redirect to current routes",
     )
     return parser.parse_args()
 
@@ -91,10 +98,85 @@ def canonical_url_for_page(page: Path, fallback_url: str) -> str:
     return urlunparse(parsed._replace(path=unquote(parsed.path)))
 
 
+def normalize_site_path(path: str) -> str:
+    path = unquote(path.strip())
+    if not path.startswith("/"):
+        path = f"/{path.lstrip('./')}"
+    if path != "/" and not path.endswith("/") and not path.endswith(".html"):
+        path = f"{path}/"
+    return path
+
+
+def rendered_page_for_site_path(output_dir: Path, path: str) -> Path:
+    normalized = normalize_site_path(path)
+    if normalized == "/":
+        return output_dir / "index.html"
+    if normalized.endswith(".html"):
+        return output_dir / normalized.lstrip("/")
+    return output_dir / normalized.lstrip("/") / "index.html"
+
+
+def write_static_redirect_page(static_dir: Path, legacy_path: str, target_url: str) -> Path:
+    normalized = normalize_site_path(legacy_path)
+    if normalized == "/":
+        raise ValueError("Refusing to overwrite the site root with a legacy redirect")
+    if normalized.endswith(".html"):
+        redirect_page = static_dir / normalized.lstrip("/")
+    else:
+        redirect_page = static_dir / normalized.lstrip("/") / "index.html"
+
+    redirect_page.parent.mkdir(parents=True, exist_ok=True)
+    redirect_page.write_text(build_redirect_html(target_url), encoding="utf-8")
+    return redirect_page
+
+
+def generate_legacy_path_redirects(
+    *,
+    legacy_path_map: Path,
+    output_dir: Path,
+    static_dir: Path,
+    site_url: str,
+) -> int:
+    if not legacy_path_map.exists():
+        return 0
+
+    redirect_count = 0
+    with legacy_path_map.open("r", encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            legacy_path = normalize_site_path(row.get("legacy_path") or "")
+            target_path = normalize_site_path(row.get("target_path") or "")
+            if not legacy_path or not target_path:
+                continue
+
+            target_page = rendered_page_for_site_path(output_dir, target_path)
+            if not target_page.exists():
+                raise RuntimeError(
+                    f"Legacy redirect target does not exist: {legacy_path} -> {target_path}"
+                )
+
+            existing_legacy_page = rendered_page_for_site_path(output_dir, legacy_path)
+            if existing_legacy_page.exists():
+                existing_canonical = canonical_url_for_page(
+                    existing_legacy_page,
+                    f"{site_url}{legacy_path}",
+                )
+                if unquote(urlparse(existing_canonical).path) == target_path:
+                    continue
+                raise RuntimeError(
+                    f"Legacy path already renders a different page: {legacy_path}"
+                )
+
+            write_static_redirect_page(static_dir, legacy_path, f"{site_url}{target_path}")
+            redirect_count += 1
+
+    return redirect_count
+
+
 def main() -> int:
     args = parse_args()
     repo_root = args.repo_root.expanduser().resolve()
     static_dir = args.static_dir.expanduser().resolve()
+    legacy_path_map = args.legacy_path_map.expanduser().resolve()
     legacy_posts_dir = static_dir / "posts"
     site_url = args.site_url.rstrip("/")
 
@@ -130,7 +212,15 @@ def main() -> int:
             (redirect_dir / "index.html").write_text(build_redirect_html(target_url), encoding="utf-8")
             redirect_count += 1
 
+        legacy_blog_redirect_count = generate_legacy_path_redirects(
+            legacy_path_map=legacy_path_map,
+            output_dir=output_dir,
+            static_dir=static_dir,
+            site_url=site_url,
+        )
+
     print(f"Generated {redirect_count} legacy redirect pages under {legacy_posts_dir}")
+    print(f"Generated {legacy_blog_redirect_count} GA legacy path redirect pages")
     return 0
 
 
